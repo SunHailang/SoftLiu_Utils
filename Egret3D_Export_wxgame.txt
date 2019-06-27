@@ -1,0 +1,29 @@
+# Egret3D引擎 导出工程到微信小游戏
+
+一、 过程：
+	1. 打开Node.js 的 Command Prompt 窗口 
+	2. 进入对应的工程目录
+	3. 输入命令行： egret build --target wxgame
+	在工程同一级目录下生成对应工程名字且以_wxgame结尾的文件夹微信开发的工程文件夹
+	
+二、 微信开发工具整理Error
+	
+	1. 删除 main.js 中的 window.main = main
+	
+	2. 从浏览器保存一份 main.bundle.js 文件 放到 js 文件夹下，并在manifest.js 中引用, 并在main函数下面 加上window.main = main, 
+	
+	3. 修改 main.bundle.js 中main函数内的 RES 获取资源的文件夹路径‘Asset’ 改成 ‘Assets’ 和 工程文件夹名称路径保持一致
+	
+	
+	4. 观察 game.js 修改： 如果不一致 或者报错 修改
+		egret3d.runEgret({
+		  contentWidth:window.innerWidth*2,
+		  contentHeight:window.innerHeight*2,
+		  antialias:true,
+		  alpha:false,
+		  gammaInput:false,
+		  antialiasSamples:4,
+
+		});
+ 
+
