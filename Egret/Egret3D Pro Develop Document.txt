@@ -1,0 +1,20 @@
+# Egret3D Pro Develop Document
+
+一、 安装Egret Launcher
+	1. Egret官网下载 egret core 3D开发下载 egret 5.3.x 版本 （gitHub上下载） https://github.com/egret-labs/egret-core/tree/5.3.x
+	
+	2. 安装 EgretWing3 用于EUI 开发， 每新建一个exml文件需要在 default.thm.json 中配置对应的 exml 文件。
+
+	3. 安装Egret Pro 用于开发Egret 3D游戏 （先安装 Node.js） 使用Command Prompt 窗口查看 Node 是否安装成功 命令行： node -v
+	
+二、 新建Egret3D项目
+	1. 打开 EgretPro 点击 "新建项目" 输入新建项目的路径 点击新建
+	
+	2. 使用 VS code 编译器打开项目的文件夹 ，进行开发
+	
+三、 资源管理
+	1. 使用 egret3d-unityplugin 导出资源，在复制进 egret 项目中 下载：https://github.com/egret-labs/egret3d-unityplugin
+	
+	2. 注意新建 Unity 项目时候资源路径要保持和 egret 的资源路径一致（注：文件名大小写一致、不然容易出错），导入 egret 资源过程 保持文件路径一致。
+
+四、 导出 egret3d 到 微信小游戏 ， 参考 文件： Egret3D_Export_wxgame.txt
