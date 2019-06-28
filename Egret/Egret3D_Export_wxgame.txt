@@ -25,5 +25,84 @@
 		  antialiasSamples:4,
 
 		});
+		
+
+三、 微信resource文件夹拆包
+	1. 微信暂时支持小于4M的游戏码包， 大于4M的游戏包，需要上传资源到腾讯云CDN中
+	
+	2. 配置Egret3D 微信小游戏开发工程
+		a. 配置文件 config.wxgame.ts 
+		先定义变量： const remoteDir = `../${projectName}_wxgame_remote_4`;
+		在 else if (command === 'publish') {
+            // TODO 合并操作应该在 publish 而不是 bake
+            return {
+                outputDir,
+                commands: [
+				//添加的内容
+                    new ResSplitPlugin({
+                        matchers:[
+                            {from:"resource/2d/**/*.sheet",to:remoteDir},
+                            {from:"!resource/2d/**",to:remoteDir},
+                            // {from:"resource/Assets/**/*.scene.json",to:outputDir},
+                            // {from:"resource/2d/**",to:outputDir},
+                            // {from:"resource/Assets/**/*.+(scene|image).json",to:`../${projectName}_wxgame`},
+                            // {from:"resource/**",to:`../${projectName}_wxgame_remote_1`},
+                        ]
+                    }),
+                    new OnelineJson(),
+		b. 修改文件 api.d.ts 文件：
+		/**
+	   * 匹配机制，将满足 from 的文件输出为 to 格式的文件
+	   * from 采用 glob 表达式 , to 包含 [path][name][hash][ext]四个变量
+	   * 示例：{ from:"resource/**.*" , to:"[path][name]_[hash].[ext]" }
+	   */
+		type Matcher = {
+			// 使from 支持 string 类型
+			from: string[]|string,
+
+			to: string
+
+		}
+		
+		c. 修改 myplugin.ts 文件：
+		添加  (暂时不知道干啥用 先加上去)
+		export class CheckFileExistPlugin implements plugins.Command 
+		{
+			async onFile(file:plugins.File) 
+			{
+				if(file.origin.indexOf('mergeJson') > 0) 
+				{
+					console.log('hjl.debug => mergeJson ',file.origin);
+				}
+				return file;
+			}
+			async onFinish(commandContext:plugins.CommandContext) 
+			{
+
+			}
+		}
+
+		export class OnelineJson implements plugins.Command 
+		{
+			async onFile(file:plugins.File) 
+			{
+				if(file.extname === '.json') 
+				{
+					file.contents = new Buffer(JSON.stringify(JSON.parse(file.contents.toString())));
+				}
+				return file;
+			}
+			async onFinish(commandContext:plugins.CommandContext) 
+			{
+
+			}
+		}
+		
+		d. 修改 Main.ts 文件：
+		修改函数 main() 
+		//修改resource资源加载地址
+		//const remoteDir:string = "";
+		//await RES.loadConfig("resource/default.res.json", remoteDir);
+		执行这一步目的： 将default.res.json 内的文件路径都会指向 remoteDir 地址下的文件（简单讲就是拼接资源获取的 url）
  
 
