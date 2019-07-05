@@ -3,7 +3,7 @@
 一、 过程：
 	1. 打开Node.js 的 Command Prompt 窗口 
 	2. 进入对应的工程目录
-	3. 输入命令行： egret build --target wxgame
+	3. 输入命令行： egret public --target wxgame
 	在工程同一级目录下生成对应工程名字且以_wxgame结尾的文件夹微信开发的工程文件夹
 	
 二、 微信开发工具整理Error
