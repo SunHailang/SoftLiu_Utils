@@ -3,8 +3,19 @@
 一、 过程：
 	1. 打开Node.js 的 Command Prompt 窗口 
 	2. 进入对应的工程目录
-	3. 输入命令行： egret public --target wxgame
+	3. 输入命令行： egret publish --target wxgame
 	在工程同一级目录下生成对应工程名字且以_wxgame结尾的文件夹微信开发的工程文件夹
+	
+	在 内核库 文件下 我的：D:\Egret\egret-core-5.3.x\tools\tasks\compile.ts 和 compile.js
+	
+	添加：
+	{
+	compilerOptions.outFile = outfile;
+    compilerOptions.allowUnreachableCode = true;
+    compilerOptions.emitReflection = true;
+    compilerOptions.defines = defines;
+	compilerOptions.module = 4; //主要地方
+	}
 	
 二、 微信开发工具整理Error
 	
