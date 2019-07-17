@@ -1,0 +1,114 @@
+# -*- coding: utf-8 -*-
+
+MongoDB 区分大小写
+
+    启动服务：
+        对应安装路径下的
+        ---dbpath=(数据库的位置在, 自定义路径)
+        ...\bin>mongod --dbpath=D:\MongoDB\data\db
+
+
+    连接数据库：
+        对应安装路径下的
+        ...\bin>mongo.exe
+
+一、 操作MongoDB数据库
+    1. 创建数据库
+        use 数据库名;
+        如果数据库不存在，则创建数据库；如果存在切换到指定数据库.
+        如果创建的数据库不在列表内，如果要显示它我们需要向刚刚创建的数据库中插入一些数据
+        db.student.insert({name:"SunHaiLang", age:18, gender:1, address:"Shanghai", phoneNum:"17621958775", isDelete:0})
+
+    2. 删除数据库
+        使用当前数据库
+        db.dropDatabase()
+
+    3. 查看所有数据库
+        show dbs
+
+    4. 查看当前所使用的数据库
+        a. db
+        b. db.getName()
+
+    5. 断开连接
+        exit
+
+    6. 查看命令api
+        help
+
+二、 集合操作
+    1. 查看当前数据库集合
+        show collections
+
+    2. 创建集合
+        db.createCollection("集合名")
+        document 格式：{key:value, key:value, ...}
+        db.集合名.insert(document)
+
+    3. 删除当前数据库中的集合
+        db.集合名.drop()
+
+三、 文档操作
+    document 文档： 基本格式  {key:value, key:value, ...}
+    1. 插入文档
+        a. 使用 insert() 方法插入文档 或者多条文档
+            db.集合名.insert([document, document, ...])
+
+        b. 使用 save() 方法插入文档
+            db.集合名.save([document, document, ...])
+            如果不指定_id字段，save() 方法类似于 insert() 方法， 如果指定_id字段，则会更新_id字段的内容
+            不指定_id字段: db.student.save({name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
+            指定_id字段: db.student.save({_id:ObjectID(""), name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
+
+    2. 文档更新
+        a. update() 方法更新已存在的文档
+            db.集合名.update(query, update, {upset:<boolean>, multi:<boolean>, writeConcern:<document>})
+            query: {key:value}条件 -> update的查询条件,类似于SQL里的update里的where后面的内容
+            update: {$set:{key:value}}内容 -> update的对象和一些更新的操作符($set, $inc)等 , $set 直接更新  ,  $inc 在原有的基础上累加后更新
+            upset: 可选, 如果不存在 update 的记录，是否作为新的数据插入 , true 为插入  ,  false 为不插入   默认false
+            multi: 可选, MongoDB 默认是false, 如果只更新找到的第一条数据,  如果是 true 就按照条件查找出来的数据全部更新
+            writeConcern： 可选, 表示抛出异常的级别
+
+        b. save() 方法通过传入的文档替换已存在的文档
+            db.集合名.save(<document>, {writeConcern:<document>})
+            document: 文档数据
+            writeConcern: 可选, 表示抛出异常
+            指定_id字段: db.student.save({_id:ObjectID(""), name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
+
+    3. 文档删除
+
+
+
+    4. 文档查询
+        db.集合名.find().pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
