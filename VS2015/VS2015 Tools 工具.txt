@@ -1,0 +1,13 @@
+##########################################################
+
+VS2015   (Windows 10)
+
+一、 项目配置
+1. default namespace , 等等的一些配置
+
+
+Build or Rebuild 时候的Config
+
+1. 项目右键 -> 属性(Properties)
+2. select Build选项 找到 Output 设置 Output path;  后面简称  $(OutDir)  例如： D:\VS2015Program\SoftLiu_VSMainMenuTools\Out\
+2. Build Event 中有 Pre-build  和  Post-build  (命令行  遵从 .bat  语法), 一般使用 Post-build 下面有post-event执行的时间点
