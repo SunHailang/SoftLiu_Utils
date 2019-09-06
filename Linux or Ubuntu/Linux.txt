@@ -1,0 +1,13 @@
+Linux 实现Windows远程访问：
+
+	一、Linux端
+		打开 Sharing 配置： 
+		1. open 打开 使处于 Activity
+		2. 允许访问，(不需要确认) 并设置密码
+		3. 安装 vncserver ->  sudo apt-get install xrdp vnc4server xbase-clients
+		4. 安装 dconf-editor -> sudo apt-get install dconf-editor
+		5. 打开 dconf-editor 设置 org->gnome->desktop->remote-access，然后取消 “requlre-encryption”的勾选
+		
+	二、Windows端(我这里使用 Windows 自带远程桌面控制(mstsc)进行访问)
+		1. 打开 cmd 输入 mstsc ， 输入 远程的IP地址
+		2. 选择模式(vnc-any)，然后输入IP地址和密码进行登录（其中端口号默认为5900，保持不变就行）
