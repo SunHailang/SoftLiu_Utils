@@ -11,3 +11,69 @@ Linux 实现Windows远程访问：
 	二、Windows端(我这里使用 Windows 自带远程桌面控制(mstsc)进行访问)
 		1. 打开 cmd 输入 mstsc ， 输入 远程的IP地址
 		2. 选择模式(vnc-any)，然后输入IP地址和密码进行登录（其中端口号默认为5900，保持不变就行）
+		
+Linux 实现使用 XShel终端连接：
+	1. 安装ssh：  sudo apt-get install openssh-server
+	2. 开启ssh服务: sudo service sshd start   或者直接重启   sudo service sshd restart
+	3. 查看ssh服务的状态: sudo service sshd status
+	4. XShell登录,填入用户名(root前面的名字，不一定和锁屏显示一样)默认端口号是22, 如果远程机拒绝密码 修改以下内容：
+		如果直接修改： vi /etc/ssh/sshd_config 	# 修改不了(文件为只读类型使用下面的命令)
+		sudo gedit /etc/ssh/sshd_config
+		
+		将： (下面是我的显示修改)
+		# Authentication:
+
+		#LoginGraceTime 2m
+		#PermitRootLogin prohibit-password
+		#StrictModes yes
+		#MaxAuthTries 6
+		#MaxSessions 10
+
+		改成：
+		# Authentication:
+
+		#LoginGraceTime 2m
+		#PermitRootLogin yes
+		#StrictModes yes
+		#MaxAuthTries 6
+		#MaxSessions 10
+	5. 在XShell命令窗口中如果vi编辑器键盘的小键盘不能使用,修改配置:
+		(远程机)右键 -> Properties -> Terminal -> VT Modes 选择 Set to Normal
+	
+	Linux是无条件信任管理员的.  (Android Linux内核,  IOS Unix内核)
+	
+	Linux 关机 or 重启： # 不管是重启系统还是关闭系统,首先要运行 sync 命令,把内存中的数据写到磁盘中.
+		1. sync			# 将数据由内存同步到硬盘中.
+		2. shutdown		# 关机指令
+			1. shutdown –h now 		# 立马关机
+			2. shutdown –h 20:25	# 系统会在今天20:25关机
+			3. shutdown –h +10		# 十分钟后关机
+			4. shutdown –r now 		# 系统立马重启
+			5. shutdown –r +10 		# 系统十分钟后重启
+			6. reboot 				# 就是重启，等同于 shutdown –r now
+			7. halt 				# 关闭系统，等同于shutdown –h now 和 poweroff
+	
+	Linux本身是不区分文件扩展名， 强制要求写上扩展名，供管理员方便管理
+	
+	Linux中所有的存储设备必须挂载才能使用,(硬盘自动挂载,U盘和光盘是手动的)给存储设备分配盘符, Windows也很相同,只是Windows的盘符是使用英文字母表市,而Linux中的盘符则是一个已经建立的空目录
+		1. 查询硬盘: fdisk -l
+		2. 创建空目录： mkdir /mut/usb/
+		3. 挂载: mount -t vfat /dev/sdb1 /mnt/usb/   # vfat 是FAT32的硬盘， sdb1是识别出来的硬盘区
+		4. 如果需要挂载的存储设备支持中文需要在挂载的时候指定编码格式: mount -t vfat -o iocharset=utf8 /dev/sdb1 /mnt/usb/
+		
+		5. 卸载设备: umount mut/usb/   #必须卸载设备后才能拔出设备 否则可能导致设备中数据丢失
+		
+		
+	Windows下的程序不能直接在Linux中使用:
+		优点： Windows下的病毒Linux是完全不识别的.
+		缺点： 所有的软件必须针对Linux单独开发
+	
+	Linux 正常显示中文： 		# 查看终端使用的编码格式 : echo $LANG
+		1. 安装了中文编码和中文字体.
+		2. 操作系统终端支持中文显示(本地终端是纯字符终端是不支持中文版编码)
+	
+	Linux IP 地址的配置：
+		
+		
+		
+			
