@@ -76,4 +76,16 @@ Linux 实现使用 XShel终端连接：
 		
 		
 		
+	Ubuntu下Linux安装sysv-rc-conf 报错：
+		错误提示： E: Unable to locate package sysv-rc-conf（无法定位sysv-rc-conf包）
+		1. sudo gedit /etc/apt/sources.list 
+			文件中的末尾添加如下内容： deb http://archive.ubuntu.com/ubuntu/ trusty main universe restricted multiverse
+		2. 更新apt-get，在终端输入： sudo apt-get update
+		3. 完成更新后，重新安装sysv-rc-conf，在终端输入： sudo apt-get install sysv-rc-conf
+	apache 的安装, 配置, 启动, 停止
+		1. 安装apache ： sudo apt-get install apache2
+		2. Start Apache 2 Server /启动apache服务 ： sudo /etc/init.d/apache2 start
+		3. Restart Apache 2 Server /重启apache服务 ： sudo /etc/init.d/apache2 restart
+		4. Stop Apache 2 Server /停止apache服务 ： sudo /etc/init.d/apache2 stop
+			
 			
