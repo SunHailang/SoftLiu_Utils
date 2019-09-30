@@ -1,0 +1,32 @@
+# Mac 下使用VSCode创建、运行C#工程
+
+1、 环境 Mono 、 OmniSharp下的C#(扩展包) 、 dotnet命令
+
+#在一个空文件夹下(默认作为解决方案的文件夹) 使用Terminal命令窗口
+1、 创建解决方案
+	dotnet new sln
+2、 添加一个工程(.Net Core 控制台项目)
+	dotnet new console -o 工程名字
+3、 添加工程到解决方案
+	dotnet sln add ./工程名字/工程名字.csproj
+4、 Build工程
+	dotnet build
+5、 添加一个类库
+	dotnet new classlib -o 类库名.Library
+6、 将类库添加至解决方案下
+	dotnet sln add ./类库名.Library/类库名.Library.csproj
+7、 引用类库
+	dotnet add 工程名字 reference ./类库名.Library/
+8、 运行工程
+	1. dotnet build 	# 在解决方案下是Build整个解决方案, cd 到工程内是Build工程(建议Build整个解决方案, 防止有类库的改变)
+	2. dotnet restore 
+	3. dotnet run		# 这个需要 cd 到具体的项目下才能执行
+
+
+
+
+
+
+
+二、 dotnet命令
+	查版本: dotnet -v
