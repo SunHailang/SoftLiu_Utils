@@ -24,6 +24,9 @@
     4. 查看使用的当前数据库
         select database();
 
+    5. 显示所有数据库
+        show databases;
+
 表的操作：
 	
 	修改表的介绍：
