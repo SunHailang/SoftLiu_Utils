@@ -6,7 +6,7 @@
 停止服务：
     net stop 数据库的服务名（不分大小写） ， 例： net stop mysql80
 
-登录：mysql -u root -p    密码：hlsun123       退出： quit 或者 exit
+登录：mysql -u root -p    密码：hlsun123 / hlsun      退出： quit 或者 exit
 查看版本号：select version();     （连接后执行）
 查看当前时间： select now();
 远程连接： mysql -h ip地址 -u 用户名 -p   密码******
