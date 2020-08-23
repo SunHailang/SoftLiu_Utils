@@ -1,0 +1,12 @@
+# 安装软件 error ： E: dpkg was interrupted, you must manually run 'sudo dpkg --configure -a' to correct the problem.
+	解决办法(删除这些引用即可):
+	cd /var/lib/dpkg/updates
+	rm -r ./*
+
+1. sftp 服务器搭建
+	
+	sudo gropadd hlsunsftp
+	
+	sudo useradd -s /bin/bash -g hlsun(用户组名) -d /home/hlsun -m hlsun
+	
+	
