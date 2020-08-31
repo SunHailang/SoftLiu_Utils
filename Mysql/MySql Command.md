@@ -26,7 +26,11 @@
 
     5. 显示所有数据库
         show databases;
-
+		
+	6. 导出表到本地文件
+		select * from 表名 into outfile "文件路径";
+		
+		
 常用数据类型：
 	数值：
 		 类型			 大小	  范围（有符号）					范围（无符号）				  用途
@@ -143,6 +147,9 @@
     删：
         a. delete from 表名; -> 没有条件 删除整张表 (慎用).
         b. delete from 表名 where 条件;
+
+		c. trunkcat table 表名;
+		d. trunkcat table 表名 where 条件;
 
     改：
         a. update 表名 set 列1=值1, 列2=值2, ... where 条件; -> 如果没有条件 所有的行都被修改 (慎用)
