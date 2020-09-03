@@ -93,6 +93,9 @@
             auto_increment 表示自增涨
             primary key 主键(不可以为空)  (联合主键(多个主键)， 只要主键加起来不一样就可以)
             default 默认值
+			unique 唯一约束
+		-- 添加外键约束
+		alter table 表名 add foreign key (列名) references 表名(列名);
         示例：create table Student(id int auto_increment primary key, name varchar(20) not null, age int not null default 18, gender bit default 1, address varchar(50), isDelete bit default 0);
 
     3. 删除表
