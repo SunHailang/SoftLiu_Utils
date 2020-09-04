@@ -96,6 +96,7 @@
 			unique 唯一约束
 		-- 添加外键约束
 		alter table 表名 add foreign key (列名) references 表名(列名);
+		
         示例：create table Student(id int auto_increment primary key, name varchar(20) not null, age int not null default 18, gender bit default 1, address varchar(50), isDelete bit default 0);
 
     3. 删除表
@@ -111,7 +112,7 @@
         rename table 原表名 to 新表明;
 
     7. 修改表结构
-        alter table 表名 add|charge|drop 列名 类型;
+       alter table 表名 add|charge|drop 列名 类型;
 
 数据操作：
     增：
@@ -151,8 +152,8 @@
         a. delete from 表名; -> 没有条件 删除整张表 (慎用).
         b. delete from 表名 where 条件;
 
-		c. trunkcat table 表名;
-		d. trunkcat table 表名 where 条件;
+		c. truncate table 表名;
+		d. truncate table 表名 where 条件;
 
     改：
         a. update 表名 set 列1=值1, 列2=值2, ... where 条件; -> 如果没有条件 所有的行都被修改 (慎用)
