@@ -8,7 +8,7 @@
 		编译好之后的apk 是没有签名的
 		
 3. 重新签名
-	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <name.keystore> unsigned.apk <alias name>
+	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <name.keystore> unsigned.apk <alias name> -storepass <password>
 		
 4.判断是否安装有 framework-res.apk
 	apktool if framework-res.apk
