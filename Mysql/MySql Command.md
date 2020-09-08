@@ -96,6 +96,17 @@
 			unique 唯一约束
 		-- 添加外键约束
 		alter table 表名 add foreign key (列名) references 表名(列名);
+		-- 删除外键约束
+		alter table 表名 drop foreign key 外键约束名称
+		
+		-- 设置某一字段唯一性
+		alter table 表名 add unique(字段名);
+		
+		-- 删除字段的唯一性
+		drop index 字段名 on 表名;
+		
+		-- 查看某一张表所有的字段唯一性
+		show keys from 表名;
 		
         示例：create table Student(id int auto_increment primary key, name varchar(20) not null, age int not null default 18, gender bit default 1, address varchar(50), isDelete bit default 0);
 
@@ -119,14 +130,7 @@
 		判断表中某一个字段数据是否存在  1：存在 ， 0：不存在
 		select 列名(s) from 表名 where 条件 limit 行数; // 默认 1， 表示是否存在
 		
-		设置某一字段唯一性
-		alter table 表名 add unique(字段名);
 		
-		删除字段的唯一性
-		drop index 字段名 on 表名;
-		
-		查看某一张表所有的字段唯一性
-		show keys from 表名;
 		
         a. 全列插入
             insert into 表名 values(....)
