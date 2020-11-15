@@ -1,0 +1,415 @@
+# **C++基础**
+
+## **1.  数据结构**
+
+1. 整型
+
+   ```c++
+   short a = 0; // 短整型， 占2字节， 表示范围 (-2^15 ~ 2^15-1)
+   int b = 0; // 整型， 占4字节， 表示范围 (-2^31 ~ 2^32-1)
+   long c = 0; // 长整型， 占4字节， 表示范围 (-2^31 ~ 2^32-1)
+   long long d = 0; // 长长整型， 占8字节， 表示范围 (-2^63 ~ 2^63-1)
+   ```
+
+2. 实型(浮点型) ：(默认情况下，输出一个小数，会显示6位有效数字)
+
+   ```C++
+   float a = 0; // 单精度， 占4字节 (7位有效数字)
+   double b = 0; // 双精度， 占8字节 (15~16位有效数字)
+   ```
+
+3. 字符型 / 字符串型
+
+   ```C++
+   #include <string>
+   using namespace std;
+   
+   char ch = 'a'; // 占1字节
+   // 转义字符 \n, \\ \t 等等... 
+   // 字符串表示方法：1.字符数组， 2.string(类型)
+   char arr[] = "hello world!";
+   string str = "hello world!";
+   
+   // bool 类型
+   bool right = true;
+   bool wrong = false;
+   ```
+
+***
+
+## **2. 数组**
+
+**放在一段连续的内存中**
+
+**数组中的每一个元素的数据类型都是相同**
+
+### **2.1 一维数组 **
+
+1. 可以统计整个数组在内存中的长度
+2. 名表示数组的首地址，也是数组第一个元素的地址
+
+### **2.2 二维数组**
+
+1. 数组名可以查看二维数组占用的内存空间
+2. 数组名是二维数组的首地址,也是第一行的首地址,也是第一行的第一个元素的首地址
+3.  获取二维数组的行数列数
+
+**示例：**
+
+```C++
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    // 一位数组
+    int arr[5];
+    int arrLen = sizeof(arr) / sizeof(arr[0]);
+    for(size_t i = 0; i < arrLen; i++)
+    {
+        arr[i] = i;
+    }
+    for(size_t i = 0; i < arrLen; i++)
+    {
+        cout << "arr[" << i << "]" << arr[i] << endl;
+    }
+    cout << "arr数组的首地址：" << arr << " or " << &arr[0] << endl; 
+
+    // 二维数组
+    int arrTwo[2][3];
+    size_t lenTotal = sizeof(arrTwo);
+    size_t rows = sizeof(arrTwo) / sizeof(arrTwo[0]); // 行数
+    size_t columns = sizeof(arrTwo[0]) / sizeof(arrTwo[0][0]); // 列数
+	
+    return 0;
+}
+
+```
+
+***
+
+## **3. 函数**
+
+**示例：**
+
+```C++
+返回值类型 函数名(参数1, 参数2, ...)
+{
+	函数体;
+	return 返回值;
+}
+```
+
+***
+
+## **4. 指针**
+
+**指针作用：** 可以通过指针间接访问内存
+
+- 内存编号是从0开始记录的，一般用十六进制数字表示
+- 可以利用指针变量保存地址
+
+**指针定义：** 指针类型 * 变量名;
+
+**占用内存空间：**
+
+- 在32位操作系统下，不管指针是什么数据类型都占用4个字节空间大小
+- 在64位操作系统下，不管指针是什么数据类型都占用8个字节空间大小
+
+### **4.1 空指针**
+
+**定义：** 指针变量指向内存中编号为0的空间
+
+**用途：** 初始化指针变量
+
+**注意：** 空指针指向的内存是不可以访问的
+
+**示例：空指针**
+
+```C++
+int main()
+{
+    // 空指针不可以访问
+	// 内存编号 0 ~ 255 为系统占用内存，不允许用户访问
+	int * p = NULL;
+    
+    return 0;
+}
+```
+
+### **4.2 野指针** 
+
+**定义：** 指针变量指向非法的内存空间
+
+```C++
+int main()
+{
+	// 指针变量p指向内存编号地址为 0x11000的空间
+    // 访问野指针会报错
+	int * p = (int *)0x11000;
+    
+    return 0;
+}
+```
+
+### **4.3 const 修饰指针**
+
+1. const 修饰指针	--- 指针常量
+
+   ```C++
+   int a = 10;
+   // 指针指向不可以改，指针指向的值可以改
+   int * const p = &a
+   ```
+
+2. const 修饰常量    --- 常量指针
+
+   ```C++
+   int a = 10;
+   // 指针指向可以改， 指针指向的值不可以改
+   const int * p = &a;
+   ```
+
+3. const 既修饰指针，又修饰常量
+
+   ```C++
+   int a = 10;
+   // 指针的指向和指针指向的值都不可以改
+   const int * const p = &a;
+   ```
+
+### **4.4 指针和数组**
+
+**示例：**
+
+```c++
+int main()
+{
+    // 定义一个数组
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	// 定义一个(int型)指针
+    int * p = arr;
+    // 一次往后偏移4个字节
+    p++; 
+    return 0;
+}
+```
+
+### **4.5 指针、数组、函数**
+
+**示例：冒泡排序**
+
+```C++
+#include<iostream>
+using namespace std;
+
+void bubbleSort(int * arr, int length);
+
+int main()
+{
+    // 声明一个数组
+    int arr[10] = { 4, 2, 6, 9, 1, 2, 10, 8, 7 }
+    int length = sizeof(arr) / sizeof(arr[0]);
+    bubbleSort(arr, length);
+}
+// 冒泡排序
+void bubbleSort(int * arr, int length)
+{
+    for(int i = 0; i < length - 1; i++)
+    {
+        for(int j = 0; j < length - i - 1; j++)
+        {
+            if(arr[j] > arr[j + 1])
+            {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+               	arr[j + 1] = temp;
+            }
+        }
+    }
+}
+```
+
+***
+
+## **5. 结构体**
+
+### **5.1 概念**
+
+- 结构体属于用户==自定义的数据类型==，允许用户存储不同的数据类型
+
+### **5.2 结构体定义和使用**
+
+**语法：** <u>struct 结构体名 {结构体成员表};</u>
+
+通过结构体创建变量的方式有三种：
+
+- struct 结构体名 变量名;
+- struct 结构体名 变量名 = {成员1值, 成员2值, ...}
+- 定义结构体时顺便创建变量
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+// 自定义的数据类型，一些类型集合组成的一个类型
+struct Student
+{
+    // 成员列表
+    string name;
+    int age;
+    int score;
+}std3; // 创建结构体变量
+
+int main()
+{
+    struct Student std1;
+    std1.name = "lisi";
+    std1.age = 16;
+    std1.score = 76;
+    
+    struct Student std2 = { "zhangsan", 18, 83 };
+    
+    std3.name = "wangwu";
+    std3.age = 26;
+    std3.score = 78;
+    
+    return 0;
+}
+```
+
+**总结：**
+
+1. 定义结构体时的关键字是struct，不可以省略
+2. 创建结构体变量时，关键字struct可以省略
+3. 结构体变量利用操作符 '.' 访问结构体成员
+
+### **5.3 结构体数组**
+
+**作用：**将自定义的结构体放入到数组中方便维护
+
+**语法：**struct 结构体名 数组名[元素个数] = { {}, {}, {}, ... }
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+// 自定义的数据类型，一些类型集合组成的一个类型
+struct Student
+{
+    // 成员列表
+    string name;
+    int age;
+    int score;
+}std3; // 创建结构体变量
+
+int main()
+{
+    struct Student stds[2]
+    {
+        { "zhangsan", 18, 78 },
+        { "lisi", 16, 76 },
+        { "wangwu", 19, 86 }
+    };
+
+    return 0;
+}
+```
+
+### **5.4 结构体指针**
+
+**作用：**通过指针访问结构体成员
+
+- 利用操作符 -> 可以通过结构体指针访问结构体属性
+
+### **5.5 结构体-结构体嵌套结构体**
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+#include<ctime>
+using namespace std;
+
+struct Student
+{
+	string name;
+	int age;
+	int score;
+}stdInit; // 创建结构体变量
+
+struct Teacher
+{
+	int id;
+	string name;
+	int age;
+	struct Student std;
+};
+
+int main()
+{
+    // 生成一个随机数种子 (按照时间计算)
+	srand((unsigned int)time(NULL));
+    
+    struct Teacher tea = { 102, "张老师", 19, { "小李", 18, 86 } };
+	tea.id = 10012;
+	tea.name = "王老师";
+	tea.age = 18;
+	tea.std.age = 5;
+	tea.std.name = "小王";
+	tea.std.score = 90;
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**在结构体中可以定义另一个结构体作为成员，用来解决实际问题
+
+### **5.6 结构体做函数参数**
+
+**作用：**将结构体作为参数向函数中传递
+
+传递方式有两种：
+
+- 值传递
+- 地址传递(指针传递) (可以节省空间)
+
+**const 使用场景：**使用const 修饰函数形参， 可以防止数据的误操作
+
+***
+
+# **案例分析**
+
+## **1. 通讯录管理系统**
+
+**结构体定义：**
+
+```C++
+struct People
+{
+    string name;
+    string gender;
+    int age;
+    string phoneNum;
+    string address;
+}
+struct AddressBook
+{
+    int peopleNum;
+    struct People peopleArray[8];
+}
+```
+
+
+
+***
