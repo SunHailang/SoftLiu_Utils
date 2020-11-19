@@ -1215,7 +1215,7 @@ public:
 private:
 	string m_bedRoom;
 };
-
+// 全局函数
 void goodGay(Build * _build)
 {
 	cout << "访问 sittingroom： " << _build->m_sittingRoom << endl;
@@ -1224,17 +1224,201 @@ void goodGay(Build * _build)
 }
 ```
 
+### **3.5 运算符重载**
+
+概念：对已有的运算符重新进行定义，赋予其另一种功能，以适应不同的数据类型
+
+运算符重载，也可以发生运算符函数的函数重载
+
+1. 对于内置的数据类型的表达式的运算符是不可能发生重载的
+2. 不要滥用运算符重载
+
+* 全局函数重载
+
+  ```C++
+  // 全局的
+  类名 operation(运算符) (参数1, 参数2, ...) { }
+  ```
+
+* 成员函数重载
+
+  ```C++
+  class 类名
+  {
+  public:
+      返回值 operation(运算符) (参数1, 参数2, ...)
+      {
+          函数体;
+          return 返回值;
+      }
+  }
+  ```
+
+#### **3.5.1 加号运算符重载**
+
+* 成员函数运算符重载
+* 全局函数运算符重载
+
+**作用：**实现两个自定义数据类型相加的运算
+
+```C++
+class Vector3
+{
+public:
+	Vector3();
+	Vector3(float x);
+	Vector3(float x, float y);
+	Vector3(float x, float y, float z);
+	~Vector3();
+
+	Vector3 operator + (Vector3 & v3);
+	Vector3 operator - (Vector3 & v3);
+	float Dot(Vector3 & v3);
+	Vector3 Cross(Vector3 & v3);
+
+private:
+	float m_x;
+	float m_y;
+	float m_z;
+};
+Vector3::Vector3(float x, float y, float z)
+{
+	this->m_x = x;
+	this->m_y = y;
+	this->m_z = z;
+}
+
+Vector3 & Vector3::operator+(Vector3 & v3)
+{
+	this->m_x += v3.m_x;
+    this->m_y += v3.m_y;
+    this->m_z += v3.m_z;
+    return *this;
+}
 
 
+int main()
+{
+    Vector3 v1 = Vector3(1,2,3);
+    Vector3 v2 = Vector3(1,2,3);
+    // 成员函数运算符重载
+    // 本质： Vector3 v3 = v1.operator+(v2);
+    Vector3 v3 = v1 + v2;
+    
+    return 0;
+}
+```
 
+#### **3.5.2 左移运算符重载**
 
+**作用：**可以输出自定义类型
 
+**只能通过全局函数实现左移运算符重载**
 
+```C++
+#include<ostream>
+using namespace std;
 
+class Vector3
+{
+    // 全局函数 做友元
+	friend ostream & operator<<(ostream & cout, Vector3 & ve3);
+public:
+	Vector3(float x, float y, float z)
+    {
+        this->m_x = x;
+        this->m_y = y;
+        this->m_z = z;
+    }
+private:
+	float m_x;
+	float m_y;
+	float m_z;
+};
+// 左移运算符重载
+ostream & operator<<(ostream & cout, Vector3 & ve3)
+{
+    cout << "X: " << ve3.m_x << ", Y:" << ve3.m_y << ", Z:" << ve3.m_z;
+	return cout;
+}
 
+int main()
+{
+    Vector3 v3 = Vector3(1,2,3);
+    cout << v3 << endl;
+    return 0;
+}
 
+```
 
+#### **3.5.3 递增运算符重载**
 
+**作用：**通过重载递增运算符，实现自己的整型数据
+
+1. 重载前置 ++ 运算符
+2. 重载后置 ++ 运算符
+
+```C++
+#include<ostream>
+using namespace std;
+
+class MyInteger
+{
+	// 全局函数做友元
+	friend ostream & operator<<(ostream & cout, MyInteger & num);
+
+public:
+	MyInteger() :m_num(0){ }
+	MyInteger(int num) : m_num(num){ }
+    
+	// 前置 ++ 运算符重载， 返回的是引用
+	MyInteger& operator++()
+  	{
+        this->m_num++;
+        return *this;
+	}
+    
+	// 后置 ++ 运算符重载， 返回的是值
+	// int 代表占位参数，可以用于区分前置和后置递增
+	MyInteger operator++(int)
+    {
+        MyInteger preNum = *this;
+        this->m_num++;
+        return preNum;
+    }
+    
+	~MyInteger();
+private:
+	int m_num;
+};
+
+ostream & operator<<(ostream & cout, MyInteger & num)
+{
+	cout << num.m_num;
+	return cout;
+}
+
+int main()
+{
+    MyInteger num = MyInteger(10);
+	cout << (++num)++ << endl; // 输出 11 
+	cout << num << endl; // 输出 12
+
+	system("pause");
+    return 0;
+}
+```
+
+#### **3.5.4 赋值运算符重载**
+
+C++编译器至少给一个类添加4个函数
+
+1. 默认构造器(无参，函数体为空)
+2. 默认析构函数(无参，函数体为空)
+3. 默认拷贝构造函数，对属性进行值拷贝
+4. 赋值运算符 operator= ，对属性进行值拷贝
+
+如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝的问题
 
 
 
