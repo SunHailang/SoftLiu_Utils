@@ -1418,7 +1418,307 @@ C++编译器至少给一个类添加4个函数
 3. 默认拷贝构造函数，对属性进行值拷贝
 4. 赋值运算符 operator= ，对属性进行值拷贝
 
-如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝的问题
+如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝的问题。
+
+```C++
+#include<iostream>
+using namespace std;
+
+class Person
+{
+private:
+	int *m_Age = NULL;
+
+public:
+	Person(int _age)
+    {
+        this->m_Age = new int(_age);
+    }
+	~Person()
+    {
+        if (this->m_Age != NULL)
+        {
+            delete this->m_Age;
+            this->m_Age = NULL;
+        }
+    }
+    // 重载赋值运算符
+	Person& operator=(Person & p)
+    {
+        // 编译器是提供浅拷贝
+        //this->m_Age = p.m_Age;
+
+        // 应该先判断是否有属性在堆区， 如果有先释放干净，然后再深拷贝
+        if (this->m_Age != NULL)
+        {
+            delete this->m_Age;
+            this->m_Age = NULL;
+        }
+        // 深拷贝
+        this->m_Age = new int(*p.m_Age);
+        // 返回对象本身
+        return *this;
+    }
+};
+int main()
+{
+    Person p1 = Person(18);
+	Person p2 = Person(20);
+	Person p3 = Person(30);
+
+	p2 = p1 = p3;
+    system("pause");
+    return 0;
+}
+```
+
+#### **3.5.5 关系运算符重载**
+
+**作用：**重载关系运算符，可以让两个自定义类型对象进行对比操作
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Person
+{
+private:
+	string m_Name;
+	int *m_Age = NULL;
+
+public:
+	Person(string _name, int _age)
+    {
+        this->m_Name = _name;
+		this->m_Age = new int(_age);
+    }
+	~Person();
+
+	Person& operator=(Person & p)
+    {
+        // 编译器是提供浅拷贝
+        //this->m_Age = p.m_Age;
+
+        this->m_Name = p.m_Name;
+
+        // 应该先判断是否有属性在堆区， 如果有先释放干净，然后再深拷贝
+        if (this->m_Age != NULL)
+        {
+            delete this->m_Age;
+            this->m_Age = NULL;
+        }
+        this->m_Age = new int(*p.m_Age);
+
+        return *this;
+    }
+	bool operator==(Person & p)
+    {
+        if (this->m_Name == p.m_Name && *this->m_Age == *p.m_Age)
+        {
+            return true;
+        }
+        return false;
+    }
+	bool operator!=(Person & p)
+    {
+        if (this->m_Name == p.m_Name && *this->m_Age == *p.m_Age)
+        {
+            return false;
+        }
+        return true;
+    }
+
+	int GetAge()
+   	{
+		return this->m_Name;
+	}
+	string GetName()
+   	{
+		return this->m_Name;
+	}
+};
+int main()
+{
+    Person p1 = Person("Tom", 18);
+	Person p2 = Person("Jack", 20);
+	Person p3 = Person("Jame", 30);
+	//p2 = p1 = p3;
+	bool yes = p1 == p2;
+	cout << (yes == true ? "Yes" : "No") << endl;
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.5.6 函数调用运算符重载**
+
+* 函数调用运算符 () 也可以重载
+* 由于重载后使用的方式非常像函数的调用，因此称为仿函数
+* 仿函数没有固定的写法，非常灵活
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+// 函数调用运算符重载
+class MyPrint
+{
+public:
+	MyPrint();
+	~MyPrint();
+
+	void operator()(string msg)
+    {
+        cout << msg << endl;
+    }
+
+    int operator()(int num1, int num2)
+    {
+        return num1 + num2;
+    }
+};
+int main()
+{
+    // 函数调用运算符重载
+	MyPrint print;
+	// 由于调用起来非常像一个函数调用， 所以被称为仿函数
+	print("Hello world.");
+	// 仿函数非常灵活
+	cout << print(100, 100) << endl;
+
+	// 匿名函数对象
+	cout << MyPrint()(100, 100) << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+***
+
+### **3.6 继承**
+
+**继承是面向对象三大特性之一**
+
+* 子类除了拥有父类的共性，还有自己的特点(从基类继承的表现其共性，而新的成员体现了其个性)
+* 继承可以减少重复的代码
+
+**语法：**
+
+```C++
+class 子类 : 继承方式 父类
+```
+
+* 子类也称为**派生类**
+* 父类也称为**基类**
+
+#### **3.6.1 继承方式**
+
+继承语法：
+
+```C++
+class 子类 : 继承方式 父类
+```
+
+**继承方式有三种：**
+
+* 公共继承
+* 保护继承
+* 私有继承
+
+<img src="继承.png" alt="**继承**" style="zoom:100%;" />
+
+#### **3.6.2 继承中的对象模型**
+
+父类中所有的非静态的成员都会被子类继承下去，父类中私有成员的属性是被编译器隐藏了访问不到，但是确实被继承下去了
+
+* 利用**''开发人员命令提示工具''**查看对象模型
+
+  跳转盘符 -> 跳转文件路径( cd 具体文件路径下 ) -> 输入命令( cl d1 reportSingleClassLayout类名 "文件名" )
+
+#### **3.6.3 继承中构造和析构顺序**
+
+子类继承父类后，当创建子类对象，也会调用父类的构造函数
+
+**顺序：**
+
+* 先构造父类，在构造子类。
+* 先析构子类，在析构父类。
+
+#### **3.6.4 继承中同名成员处理方式**
+
+* 访问子类同名属性成员 直接访问即可
+
+* 访问父类同名属性成员 需要加作用域
+
+  语法：
+
+  ```C++
+  Son s;
+  cout << "Son  m_A = " << s.m_A << endl;
+  cout << "Base m_A = " >> s.Base::m_A << end;
+  ```
+
+* 访问子类同名函数成员 直接访问即可
+
+* 访问父类同名函数成员 需要加作用域
+
+  语法：
+
+  ```C++
+  Son s;
+  s.func();
+  s.Base::func();
+  ```
+
+* 如果子类中出现和父类同名的成员函数，子类的同名成员会隐藏掉父类中所有同名成员函数，如果想访问到父类中被隐藏的同名成员函数，需加作用域
+
+#### **3.6.6 继承同名静态成员处理方式**
+
+静态成员和非静态成员出现同名，处理方式一致
+
+* 访问子类同名成员 直接访问即可
+* 访问父类同名成员 需要加作用域
+
+#### **3.6.7 多继承语法**
+
+C++允许一个类继承多个父类
+
+**语法：**
+
+```C++
+class 子类 : 继承方式 父类1, 继承方式 父类2, ...
+```
+
+多继承可能会引发父类中有同名成员出现，需要加作用域区分
+
+**C++实际开发中不建议用多继承**
+
+#### **3.6.8 菱形继承**
+
+**概念：**
+
+* 两个派生类继承同一个基类，又有某一个类同时继承两个派生类，这种继承被称为**菱形继承**，或者**钻石继承**
+
+**菱形继承的问题：**
+
+1. 羊继承了动物的数据，驼也继承了动物的数据，当羊驼使用数据的时候，会产生二义性？
+   * 解决：加作用域可以区分
+2. 羊驼继承自动物数据继承了两份，但是羊驼只需要一份数据就行了(资源浪费)，但是这一份应该是来自羊的还是来自驼的？
+   * 解决：利用虚继承（在继承之前加上关键字：virtual ，最前面的基类称为：虚基类）
+   * **vbptr：** v -> virtual ，b -> base ，pt -> pointer
+
+### **3.7 多态**
+
+
+
+
 
 
 
