@@ -1921,13 +1921,13 @@ C++中对文件的操作需要包含头文件==<fstream>==
 
 3. 打开文件
 
-   ofs.open("问件路径", 打开方式);
+   ofs.open("文件路径", 打开方式);
 
 4. 写数据
 
    ofs << "写入的数据";
 
-5. 关闭问件
+5. 关闭文件
 
    ofs.close();
 
@@ -1935,14 +1935,14 @@ C++中对文件的操作需要包含头文件==<fstream>==
 
 | **打开方式** | **解释**                   |
 | :----------- | -------------------------- |
-| ios::in      | 为读文件而打开问件         |
-| ios::out     | 为写文件而打开问件         |
-| ios::ate     | 初始位置：问件尾           |
+| ios::in      | 为读文件而打开文件         |
+| ios::out     | 为写文件而打开文件         |
+| ios::ate     | 初始位置：文件尾           |
 | ios::app     | 追加方式写文件             |
 | ios::trunc   | 如果文件存在先删除，在创建 |
 | ios::binary  | 二进制方式                 |
 
-**注意：**问件打开方式可以配合使用，利用 | 操作符
+**注意：**文件打开方式可以配合使用，利用 | 操作符
 
 **示例：** 用二进制方式写文件：ios::binary | ios::out
 
@@ -1962,7 +1962,7 @@ int main()
 	// 4. 写内容
 	ofs << "Name: Tom" << endl;
 	ofs << "Age: 18" << endl;
-	// 5. 关闭问件
+	// 5. 关闭文件
 	ofs.close();
 
 	system("pause");
@@ -1972,11 +1972,11 @@ int main()
 
 **总结：**
 
-* 问件操作必须包含头文件 fstream
+* 文件操作必须包含头文件 fstream
 * 读文件可以利用 ofstream ，或者 fstream 类
 * 打开文件时候需要指定操作文件的路径，以及打开方式
 * 利用 << 可以向文件中写数据
-* 操作完毕，要关闭问件
+* 操作完毕，要关闭文件
 
 #### **4.1.2 读文本文件**
 
@@ -2000,7 +2000,7 @@ int main()
 
    四种方式读取
 
-5. 关闭问件
+5. 关闭文件
 
    ifs.close();
 
@@ -2052,7 +2052,7 @@ int main()
 	//	cout << c;
 	//}
 
-	// 5. 关闭问件
+	// 5. 关闭文件
 	ifs.close();
 
 	system("pause");
@@ -2064,7 +2064,7 @@ int main()
 
 * 读文件可以利用 ifstream ， 或者 fstream 类
 * 利用 is_open 函数可以判断文件是否打开
-* close 关闭问件
+* close 关闭文件
 
 ### **4.2 二进制文件**
 
@@ -2104,7 +2104,7 @@ int main()
 	// 4. 写文件
 	Person p = { "Jack", 18 };
 	ofs.write((const char *)&p, sizeof(Person));
-	// 5. 关闭问件
+	// 5. 关闭文件
 	ofs.close();
 	cout << "Write Binary Success." << endl;
     
@@ -2156,7 +2156,7 @@ int main()
 	// 4. 读文件
 	Person p;
 	ifs.read((char *)&p, sizeof(Person));
-	// 5. 关闭问件
+	// 5. 关闭文件
 	ifs.close();
 
 	cout << "Person Name:" << p.Name << "  Age:" << p.Age << endl;
