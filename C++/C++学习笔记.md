@@ -487,42 +487,6 @@ int main()
 
 ***
 
-# **案例分析**
-
-## **1. 通讯录管理系统**
-
-**系统需求：**
-
-* 添加联系人：向通讯录中添加新人，信息包括（姓名、性别、年龄、联系电话、家庭住址）最多纪录1000人
-* 显示联系人：显示通讯录中所有联系人
-* 删除联系人：按照姓名进行删除指定联系人
-* 查找联系人：按照姓名查找指定联系人
-* 修改联系人：按照姓名重新修改指定联系人
-* 清空联系人：清空通讯录中所有信息
-* 退出通讯录：退出当前使用的通讯录
-
-**结构体定义：**
-
-```C++
-struct People
-{
-    string name;
-    string gender;
-    int age;
-    string phoneNum;
-    string address;
-};
-struct AddressBook
-{
-    int peopleNum;
-    struct People peopleArray[1000];
-};
-```
-
-
-
-***
-
 # **C++核心编程**
 
 ## **1. 内存分区模型**
@@ -2173,13 +2137,379 @@ int main()
 
 ***
 
+# **C++提高编程**
+
+* 本阶段主要针对C++==泛型编程==和==STL==技术详细讲解，探讨C++更深层的使用
+
+## **1. 模板**
+
+**概念：**
+
+* 模板就是建立**通用的模具**，大大**提高复用性**
+* C++提供两种模板机制：**函数模板**和**类模板**
+
+**特点：**
+
+* 模板不可以直接使用，它只是一个框架
+* 模板的通用并不是万能的
+
+### **1.1 函数模板**
+
+* C++另一种编程思想称为==泛型编程==，主要利用的技术就是模板
+
+**作用：**
+
+* 建立一个通用的函数，其函数返回值类型和形参类型可以不具体制定，用一个**虚拟的类型**来代表。
+
+**语法：**
+
+```C++
+template<typename T>
+函数声明或定义
+```
+
+**解释：**
+
+template	--	声明创建模板
+
+typename  --	表示其后面的符号是一种数据类型，可以用 class 代替
+
+T			   -- 	通用的数据类型，名称可以替换，通常为大写字母	
+
+**示例：**
+
+```C++
+#include <iostream>
+using namespace std;
+
+// 函数模板
+// 交换两个数
+template<typename T>
+void mySwap(T &a, T &b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+
+int main()
+{
+	int a = 10;
+	int b = 20;
+	//利用函数模板交换数据
+	// 两种方式使用函数模板
+	// 1. 自动类型推导
+	mySwap(a, b);
+	cout << "a=" << a << endl;
+	cout << "b=" << b << endl;
+	// 2. 显示指定类型
+	mySwap<int>(a, b);
+	cout << "a=" << a << endl;
+	cout << "b=" << b << endl;
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+* 函数模板利用关键字 template
+* 使用函数模板有两种方式：自动类型推导、显示指定类型
+* 模板的目的是为了提高代码复用性，将类型参数化
+
+#### **1.1.1 函数模板注意事项**
+
+* 自动类型推导，必须要推导出一致的数据类型 T ，才可以使用
+
+  ```c++
+  #include <iostream>
+  using namespace std;
+  
+  template<typename T>
+  void mySwap(T &a, T &b)
+  {
+  	T temp = a;
+  	a = b;
+  	b = temp;
+  }
+  
+  int main()
+  {
+      int a = 10;
+  	char b = 'a';
+      //mySwap(a, b); // 报错， 推导出不一致的数据类型
+      system("pause");
+  	return 0;
+  }
+  ```
+
+* 模板必须要确定出 T 的数据类型才能使用
+
+  ```C++
+  #include <iostream>
+  using namespace std;
+  
+  template<typename T>
+  void mySwap()
+  {
+  	cout << "调用 mySwap 函数" << endl;
+  }
+  
+  int main()
+  {
+      //mySwap(); // 报错，没有指定T的数据类型
+      mySwap<int>();
+      system("pause");
+  	return 0;
+  }
+  ```
+
+**总结：**
+
+* 使用模板时必须要确定出通用数据类型 T ，并且能够推导出一致的类型
+
+#### **1.1.2 普通函数和函数模板的区别**
+
+**区别：**
+
+* 普通函数调用时可以发生自动类型转换（隐式类型转换）
+* 函数模板调用时，如果利用自动推导类型，不会发生隐式类型转换
+* 函数模板调用时，如果利用指定类型的方式，可以发生隐式类型转换
+
+**总结：**建议使用显示指定类型的方式，调用函数模板，因为可以自己确定通用类型 T
+
+#### **1.1.3 普通函数与函数模板的调用规则**
+
+**调用规则如下：**
+
+1. 如果函数模板和普通函数都可以实现，优先使用普通函数
+2. 可以通过空模板参数列表来强制调用函数模板
+3. 函数模板也可以发生重载
+4. 如果函数模板可以产生更好的匹配，优先调用函数模板
+
+#### **1.1.4 模板的局限性**
+
+**局限性：**
+
+* 模板的通用性并不是万能的
+
+```C++
+// 例如自定义的类型 进行比较 模板就不能实现了
+// 采用 模板的重载
+class Person
+{
+public:
+    int m_ID;
+}
+template<typename T>
+bool myComplete(T &p1, T &p2)
+{
+    return p1 == p2;
+}
+// 重载
+template<> bool myComplete(Person &p1, Person &p2)
+{
+    return (pi.m_ID == p2.m_ID);
+}
+```
+
+**总结：**
+
+* 利用具体化的模板，可以解决自定义类型的通用化
+* 学习模板并不是为了写模板，而是在 STL 能够运用系统提供的模板
+
+***
+
+### **1.2 类模板**
+
+**类模板的作用：**
+
+* 建立一个通用类，类中的成员数据类型可以不具体指定，用一个**虚拟的类型**来代表
+
+**语法：**
+
+```C++
+template<class T1, class T2, ..., class Tn = int>// 可以有多个, 可以有默认参数类型
+class 类名 {}
+```
+
+**解释：**
+
+* template		--	声明创建模板
+
+* typename	  --	表示其后面的符号是一种数据类型，可以用 class 代替
+
+* T				   --	通用的数据类型，名称可以替换，通常为大写字母
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+// 类模板
+template<class NameType, class AgeType>
+class Person
+{
+public:
+	Person(NameType _name, AgeType _age)
+	{
+		this->m_Name = _name;
+		this->m_Age = _age;
+	}
+
+	void ShowPerson()
+	{
+		cout << "Name:" << this->m_Name << " , Age:" << this->m_Age << endl;
+	}
+
+public:
+	NameType m_Name;
+	AgeType m_Age;
+};
+
+int main()
+{
+	Person<string, int>p1("Jack", 18);
+	p1.ShowPerson();
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **1.2.1 类模板与函数模板区别**
+
+区别主要在两点：
+
+1. 类模板没有自动类型推导的使用方式
+2. 类模板在模板参数列表中可以有默认参数
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+// 类模板
+template<class NameType, class AgeType = int>
+class Person
+{
+public:
+	Person(NameType _name, AgeType _age)
+	{
+		this->m_Name = _name;
+		this->m_Age = _age;
+	}
+
+	void ShowPerson()
+	{
+		cout << "Name:" << this->m_Name << " , Age:" << this->m_Age << endl;
+	}
+
+public:
+	NameType m_Name;
+	AgeType m_Age;
+};
+
+// 类模板没有自动类型推导的使用方式
+// 类模板在模板参数列表中可以有默认参数
+int main()
+{
+	//Person p1("Jack", 18); // 报错无法用数据类型推导
+	Person<string, int> p1("Jack", 18); // 只能用显示指定类型
+	p1.ShowPerson();
+
+	Person<string> p2("Tom", 20);// 类模板的类型的默认参数 默认
+	p2.ShowPerson();
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+* 类模板使用只能用显示指定类型方式
+* 类模板中模板参数列表可以有默认参数，切默认参数只能放到最后（与函数的默认参数相似）
+
+#### **1.2.2 类模板中成员函数创建时机**
+
+类模板中成员函数和普通类中的成员函数创建时机是有区别的：
+
+* 普通类中的成员函数一开始就可以创建
+* 类模板中的成员函数在调用时才创建
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Person1
+{
+public:
+	void showPerson1()
+	{
+		cout << "Show Person1" << endl;
+	}
+};
+
+class Person2
+{
+public:
+	void showPerson2()
+	{
+		cout << "Show Person2" << endl;
+	}
+};
+
+// 类模板
+template<class T>
+class MyClass
+{
+public:
+	T obj;
+
+	void func1()
+	{
+		obj.showPerson1();
+	}
+
+	void func2()
+	{
+		obj.showPerson2();
+	}
+};
+// 1. 类模板中的成员函数是在调用的时候才开始编译的
+
+int main()
+{
+	MyClass<Person1> p1;
+	p1.func1();
+
+	MyClass<Person2> p2;
+	p2.func2();
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**类模板中的成员函数并不是一开就创建的，而是在调用的时候才去创建
+
+#### **1.2.3 类模板对象做函数参数**
+
+一共三种传入方式：
+
+1. 指定传入的类型	---	直接显示对象的数据类型
+2. 参数模板化           ---    将对象中的参数变为模板进行传递
+3. 整个类模板化       ---    将这个对象类型模板化进行传递
 
 
 
-
-
-
-
+***
 
 
 
