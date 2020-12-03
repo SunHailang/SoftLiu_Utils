@@ -2507,6 +2507,121 @@ int main()
 2. 参数模板化           ---    将对象中的参数变为模板进行传递
 3. 整个类模板化       ---    将这个对象类型模板化进行传递
 
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+// 类模板
+template<class T1, class T2>
+class Person
+{
+public:
+	Person(T1 _name, T2 _age)
+	{
+		this->m_Name = _name;
+		this->m_Age = _age;
+	}
+	void ShowPerson()
+	{
+		cout << "Name: " << this->m_Name << "\tAge: " << this->m_Age << endl;
+	}
+public:
+	T1 m_Name;
+	T2 m_Age;
+};
+// 指定传入类型 -- 常用
+void printPerson01(Person<string, int> &p)
+{
+	p.ShowPerson();
+}
+// 参数模板化
+template<class T1, class T2>
+void printPerson02(Person<T1, T2> &p)
+{
+	p.ShowPerson();
+	cout << "T1 Type:" << typeid(T1).name() << endl;
+	cout << "T2 Type:" << typeid(T2).name() << endl;
+}
+// 整个类模板化
+template<class T>
+void printPerson03(T &p)
+{
+	p.ShowPerson();
+	cout << "T Type:" << typeid(T).name() << endl;
+}
+int main()
+{
+	Person<string, int> p1("Tom", 18);
+	//printPerson01(p1);
+	//printPerson02(p1);
+	printPerson03(p1);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+* 通过类模板创建的对象，可以有三种方式向函数中进行传参
+* 使用比较广泛是第一种：指定传入的类型
+
+#### **1.2.4 类模板与继承**
+
+当类模板遇到继承的时候，需要注意以下几点：
+
+1. 当子类继承的父类是一个类模板时，子类在声明的时候，要指定出父类中 T 的类型
+2. 如果不指定，编译器无法给子类分配内存
+3. 如果想灵活指定出父类中 T 的类型，子类也需变为类模板
+
+**示例：**
+
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+
+// 类模板与继承
+template<class T>
+class Base
+{
+	T m_t;
+};
+//class Son :public Base// 错误必须要知道父类中 T 的类型才能继承给子类
+class Son1 :public Base<int>
+{
+
+};
+// 子类也变成一个类模板
+template<class T1, class T2>
+class Son2 :public Base<T2>
+{
+public:
+	Son2()
+	{
+		cout << "T1 Type:" << typeid(T1).name() << endl;
+		cout << "T2 Type:" << typeid(T2).name() << endl;
+	}
+public:
+	T1 obj;
+};
+int main()
+{
+	Son1 s1; // 此时 Base 的 T 只能是 int 类型
+	Son2<int, char> s2; // 此时 Base 的 T 是 char 类型
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**如果父类是类模板，子类需要指定出父类中 T 的数据类型
+
+#### **1.2.5 类模板成员函数类外实现**
+
+学习目标：能够掌握类模板中的成员函数类外实现
+
 
 
 ***
