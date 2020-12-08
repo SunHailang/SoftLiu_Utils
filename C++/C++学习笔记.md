@@ -2622,10 +2622,246 @@ int main()
 
 学习目标：能够掌握类模板中的成员函数类外实现
 
+```C++
+#include<iostream>
+#include<string>
+using namespace std;
+// 模板类
+template<class T1, class T2>
+class Person {
+public:
+	Person(T1 name, T2 age);
+	void ShowPerson();
+public:
+	T1 m_Name;
+	T2 m_Age;
+};
+// 构造函数类外实现
+template<class T1, class T2>
+Person<T1, T2>::Person(T1 name, T2 age)
+{
+	this->m_Name = name;
+	this->m_Age = age;
+}
+// 成员函数类外实现
+template<class T1, class T2>
+void Person<T1, T2>::ShowPerson()
+{
+	cout << "Name:" < m_Name << ", Age:" << m_Age << endl;
+}
+```
 
+**总结：**类模板中成员函数类外实现时，需要加上模板参数列表.
+
+#### **1.2.6 类模板分文件编写**
+
+**问题：**
+
+* 类模板中成员函数创建时机是在调用阶段，导致分文件编写时链接不到
+
+**解决：**
+
+* **解决方式1：**直接包含.cpp源文件
+* **解决方式2：**将声明和实现写到同一个文件中，并更改后缀名为 .hpp ，hpp是约定的名称并不是强制
+
+**总结：**主流解决方式使用第二种，将类模板成员函数写到一个文件中，并将文件后缀名改为：.hpp
+
+#### **1.2.7 类模板与友元**
+
+**学习目标：**
+
+* 掌握类模板配合友元函数的类内和类外实现
+
+全局函数类内实现 - 直接在类内声明友元即可
+
+全局函数类外实现 - 需要提前让编译器知道全局函数的存在
+
+```C++
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 提前让编译器知道Person类的存在
+template<class T1, class T2> class Person;
+
+template<class T1, class T2>
+void PrintPerson(Person<T1, T2> &p)
+{
+	cout << typeid(T1).name() << "  " << typeid(T2).name()<< endl;
+	
+	cout << "Name:" << p.m_Name << ", Age:" << p.m_Age << endl;
+}
+
+template<class T1, class T2>
+class Person {
+	// 全局函数类外实现
+	friend void PrintPerson<>(Person<T1, T2> &p);
+
+	// 全局函数类内实现
+	friend void PrintPerson2(Person<T1, T2> &p)
+	{
+		cout << typeid(T1).name() << "  " << typeid(T2).name() << endl;
+
+		cout << "Name:" << p.m_Name << ", Age:" << p.m_Age << endl;
+	}
+
+public:
+	Person(T1 name, T2 age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+private:
+	T1 m_Name;
+	T2 m_Age;
+};
+
+int main()
+{
+	Person<string, int> p1("Jack", 18);
+
+	// 全局函数类外实现
+	PrintPerson(p1);
+
+	// 全局函数类内实现
+	PrintPerson2(p1);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**建议全局函数类内实现，用法简单，而且编译器可以直接识别
 
 ***
 
+## **2. STL初识**
+
+### **2.1 STL的诞生**
+
+* 长久以来，软件界一直希望建立一种可重复利用的东西
+* C++的**面向对象**和**泛型编程**思想，目的就是**复用性的提升**
+* 大多情况下，数据结构和算法都未能有一套标准导致被迫从事大量重复工作
+* 为了建立数据结构和算法的一套标准，诞生了**STL**
+
+### **2.2 概念：**
+
+* STL(Standard Template Library, **标准模板库**)
+* STL从广义上分为：**容器(container)、算法(algorithm)、迭代器(iterator)**
+* **容器**和**算法**之间通过**迭代器**进行无缝连接
+* STL几乎所有的代码都采用了模板类或者模板函数
+
+### **2.3 STL六大组件**
+
+STL大体分为六大组件，分别是：**容器、算法、迭代器、仿函数、适配器（配接器）、空间配置器**
+
+1. **容器**：各种数据结构，如：vector、list、deque、set、map等，用来存放数据。
+2. **算法**：各种常用的算法，如：sort、find、copy、for_each等。
+3. **迭代器**：扮演了容器与算法之前的胶合剂。
+4. **仿函数**：行为类似函数，可作为算法的某种策略。
+5. **适配器**：一种用来修饰容器或者仿函数或迭代器接口的东西。
+6. **空间配置器**：负责空间的配置与管理。
+
+### **2.4 STL中容器、算法、迭代器**
+
+**容器：**置物之所也
+
+STL**容器**就是将运用**最广泛的一些数据结构**实现出来
+
+常用的数据结构：**数组、链表、树、栈、队列、集合、映射表**等
+
+这些容器分为**序列式容器**和**关联式容器**两种：
+
+* **序列式容器**：强调值的排序，序列式容器中的每个元素均有固定位置。
+* **关联式容器**：二叉树结构，各元素之间没有严格物理上的顺序关系。
+
+**算法：**问题之解法也
+
+有限的步骤，解决逻辑或数学上的问题，这一门学科我们叫做算法(Algorithms)。
+
+算法分为：**质变算法**和**非质变算法**
+
+* **质变算法**：是指运算过程中会更改区间内的元素的内容，例如：拷贝、替换、删除等等。
+* **非质变算法**：是指运算过程中不会更改区间内的元素的内容，例如：查找、计数、遍历、寻找极值等等。
+
+**迭代器：**容器和算法之间粘合剂
+
+提供一种方法，使之能够依序寻访某个容器所含的各个元素，而又无需暴露该容器的内部表达方式。
+
+每个容器都有自己专属的迭代器
+
+迭代器使用非常类似于指针，初学阶段我们可以先理解迭代器为指针
+
+**迭代器种类：**
+
+|    **种类**    |                         **功能**                         |               **支持运算**                |
+| :------------: | :------------------------------------------------------: | :---------------------------------------: |
+|   输入迭代器   |                     对数据的只读访问                     |          只读，支持：++、==、!=           |
+|   输出迭代器   |                     对数据的只写访问                     |              只写，支持：++               |
+|   前向迭代器   |               读写操作，并能向前推进迭代器               |          读写，支持：++、==、!=           |
+|   双向迭代器   |               读写操作，并能向前和向后操作               |            读写，支持：++、--             |
+| 随机访问迭代器 | 读写操作，可以以跳跃的方式访问任意数据，功能最强的迭代器 | 读写，支持：++、--、[n]、-n、<、<=、>、>= |
+
+常用的容器中迭代器种类为双向迭代器，和随机访问迭代器
+
+### **2.5 容器、算法、迭代器初识**
+
+了解STL中容器、算法、迭代器概念之后，我们利用代码感受STL的魅力
+
+STL中最常用的容器为Vector，可以理解为数组，下面我们将学习如何向这个容器中插入数据，并遍历这个容器
+
+#### **2.5.1 vector存放内置数据类型**
+
+容器：==vector==
+
+算法：==for_each==
+
+迭代器：==vector<int>::iterator==
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <vector>
+#include <algorithm>// 标准算法的头文件
+using namespace std;
+
+int main()
+{
+	vector<int> v1;
+	// 向容器中插入数据
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(30);
+	v1.push_back(40);
+	v1.push_back(50);
+	// 通过迭代器访问容器中的数据
+	vector<int>::iterator itBegin = v1.begin();// 指向第一个元素
+	vector<int>::iterator itEnd = v1.end(); // 指向最后一个元素的下一个元素
+	// 第一种遍历方式
+	while (itBegin != itEnd)
+	{
+		cout << *itBegin << endl;
+		itBegin++;
+	}
+	// 第二种遍历方式
+	for (vector<int>::iterator itBegin2 = v1.begin(); itBegin2 != v1.end(); itBegin2++)
+	{
+		cout << *itBegin2 << endl;
+	}
+	// 第三种遍历方式
+	for_each(v1.begin(), v1.end(), [](int value) 
+	{
+		cout << value << endl;
+	});
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **2.5.2 vector存放自定义数据类型**
 
 
 
@@ -2633,6 +2869,9 @@ int main()
 
 
 
+
+
+***
 
 
 
