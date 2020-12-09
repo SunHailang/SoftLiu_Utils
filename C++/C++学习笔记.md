@@ -2720,10 +2720,8 @@ private:
 int main()
 {
 	Person<string, int> p1("Jack", 18);
-
 	// 全局函数类外实现
 	PrintPerson(p1);
-
 	// 全局函数类内实现
 	PrintPerson2(p1);
 
@@ -2745,7 +2743,7 @@ int main()
 * 大多情况下，数据结构和算法都未能有一套标准导致被迫从事大量重复工作
 * 为了建立数据结构和算法的一套标准，诞生了**STL**
 
-### **2.2 概念：**
+### **2.2 概念**
 
 * STL(Standard Template Library, **标准模板库**)
 * STL从广义上分为：**容器(container)、算法(algorithm)、迭代器(iterator)**
@@ -2819,6 +2817,11 @@ STL中最常用的容器为Vector，可以理解为数组，下面我们将学�
 
 迭代器：==vector<int>::iterator==
 
+**叙述：**
+
+* vector容器的**内存自增长**，与其他容器不同，其**内存空间只会增长，不会减小**。
+* 关于 vector 的内存空间，有两个函数需要注意：size() 成员指当前拥有的元素个数，capacity() 成员指当前(容器必须分配新存储空间之前)可以存储的元素个数。reserve() 成员可以用来控制容器的预留空间。vector 另外一个特性在于它的内存空间会自增长，每当 vector 容器不得不分配新的存储空间时，会以加倍当前容量的分配策略实现重新分配。
+
 **示例：**
 
 ```C++
@@ -2829,16 +2832,24 @@ using namespace std;
 
 int main()
 {
-	vector<int> v1;
-	// 向容器中插入数据
-	v1.push_back(10);
-	v1.push_back(20);
-	v1.push_back(30);
-	v1.push_back(40);
-	v1.push_back(50);
+	vector<int> vec;
+	// 尾部插入元素
+	vec.push_back(10);
+	vec.push_back(20);
+	vec.push_back(30);
+	vec.push_back(40);
+	vec.push_back(50);
+	// 插入元素 在第2个元素后面插入 25;
+	vec.insert(vec.begin() + 2, 25);
+	// 删除元素  删除第 2 个元素
+	vec.erase(vec.begin() + 1);
+	// 使用下标访问元素
+	cout << "Vector Second Data:" << vec[2] << endl;
+	// 容器大小
+	cout << "Vector Size:" << vec.size() << endl;
 	// 通过迭代器访问容器中的数据
-	vector<int>::iterator itBegin = v1.begin();// 指向第一个元素
-	vector<int>::iterator itEnd = v1.end(); // 指向最后一个元素的下一个元素
+	vector<int>::iterator itBegin = vec.begin();// 指向第一个元素
+	vector<int>::iterator itEnd = vec.end(); // 指向最后一个元素的下一个元素
 	// 第一种遍历方式
 	while (itBegin != itEnd)
 	{
@@ -2846,15 +2857,17 @@ int main()
 		itBegin++;
 	}
 	// 第二种遍历方式
-	for (vector<int>::iterator itBegin2 = v1.begin(); itBegin2 != v1.end(); itBegin2++)
+	for (vector<int>::iterator itBegin2 = vec.begin(); itBegin2 != vec.end(); itBegin2++)
 	{
 		cout << *itBegin2 << endl;
 	}
 	// 第三种遍历方式
-	for_each(v1.begin(), v1.end(), [](int value) 
+	for_each(vec.begin(), vec.end(), [](int value)
 	{
 		cout << value << endl;
 	});
+	// 清空 容器  清空之后，vec.size()为0
+	vec.clear(); 
 
 	system("pause");
 	return 0;
@@ -2863,7 +2876,1186 @@ int main()
 
 #### **2.5.2 vector存放自定义数据类型**
 
+**示例：**
 
+```C++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+// 自定义一个数据类型
+class Person {
+public:
+	string	m_Name;
+	int m_Age;
+
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+};
+
+int main()
+{
+	Person p1("Tom", 15);
+	Person p2("Jack", 17);
+	Person p3("Mark", 18);
+	Person p4("Jame", 16);
+	Person p5("XiaoMing", 26);
+	// 容器存放对象
+	vector<Person> vec;
+	// 向容器中插入数据
+	vec.push_back(p1);
+	vec.push_back(p2);
+	vec.push_back(p3);
+	vec.push_back(p4);
+	vec.push_back(p5);
+	// 遍历容器中数据
+	for (vector<Person>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		// it 实际是元素数据类型的指针
+		cout << "Name:" << it->m_Name << ", Age:" << it->m_Age << endl;
+	}
+	cout << "-------------------------" << endl;
+	for_each(vec.begin(), vec.end(), [](Person p) {
+		cout << "Name:" << p.m_Name << ", Age:" << p.m_Age << endl;
+	});
+	cout << "##################################" << endl;
+	// 容器存放指针
+	vector<Person *> vec1;
+	vec1.push_back(&p1);
+	vec1.push_back(&p2);
+	vec1.push_back(&p3);
+	vec1.push_back(&p4);
+	vec1.push_back(&p5);
+    // 遍历容器中数据
+	for (vector<Person *>::iterator it = vec1.begin(); it != vec1.end(); it++)
+	{
+		Person * per = *it;
+		cout << "Name:" << per->m_Name << ", Age:" << per->m_Age << endl;
+	}
+	cout << "-------------------------" << endl;
+	for_each(vec1.begin(), vec1.end(), [](Person * p) {
+		cout << "Name:" << p->m_Name << ", Age:" << p->m_Age << endl;
+	});
+	cout << "##################################" << endl;
+	system("pause");
+	return 0;
+}
+```
+
+#### **2.5.4 vector容器中嵌套容器**
+
+学习目标：容器中嵌套容器，我们将所有的数据进行遍历输出
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+// 容器嵌套容器
+int main()
+{
+	vector<vector<int>> vec;
+	// 循环添加容器元素
+	for (int i = 0; i < 5; i++)
+	{
+		vector<int> v;
+		for (int j = 0; j < 5; j++)
+		{
+			v.insert(v.begin() + j, j + i);
+		}
+		vec.push_back(v);
+	}
+	// 遍历 容器元素
+	for (vector<vector<int>>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		vector<int> v = *it;
+		for (vector<int>::iterator it1 = v.begin(); it1 != v.end(); it1++)
+		{
+			cout << *it1 << "  ";
+		}
+		cout << endl;
+	}
+	cout << "---------------------" << endl;
+	for_each(vec.begin(), vec.end(), [](vector<int> v) {
+		for_each(v.begin(), v.end(), [](int value) {
+			cout << value << "  ";
+		});
+		cout << endl;
+	});
+
+
+	system("pause");
+	return 0;
+}
+```
+
+***
+
+## **3. STL - 常用容器**
+
+### **3.1 string容器**
+
+#### **3.1.1 string基本概念**
+
+**本质：**
+
+* string 是 C++ 风格的字符串，而 string 本质上是一个类
+
+**string 和 char * 区别**
+
+* char * 是一个指针
+* string 是一个类，类内部封装了 char * ，管理这个字符串，是一个 char * 型的容器
+
+**特点：**
+
+* string 类内部封装了很多成员方法
+
+  例如：**查找 find，拷贝 copy，删除 delete，替换 replace，插入 insert
+
+* string 管理 char * 所分配的内存，不用担心复制越界和取值越界等，由类内部进行负责
+
+#### **3.1.2 string构造函数**
+
+构造函数原型：
+
+* ```C++
+  string();					// 创建一个空的字符串， 例如：string str;
+  ```
+
+* ```C++
+  string(const char* s);       // 使用字符串 s 初始化
+  ```
+
+* ```C++
+  string(const string& str); 	// 使用一个 string 对象初始化另一个 string 对象
+  ```
+
+* ```C++
+  string(int n, char c);    	// 使用 n 个字符 c 初始化
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+using namespace std;
+// string 构造函数
+int main()
+{
+	// 无参构造
+	string s1;
+	// char * 初始化字符串
+	const char * chs = "Hello World.";
+	string s2(chs);
+	cout << "s2= " << s2 << endl;
+	cout << "---------------------" << endl;
+	// 字符串初始化字符串
+	string s3(s2);
+	cout << "s3= " << s3 << endl;
+	cout << "---------------------" << endl;
+	// 字符个数 初始化字符串
+	string s4(10, 'a');
+	cout << "s4= " << s4 << endl;
+	cout << "---------------------" << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.1.3 string赋值操作**
+
+功能描述：
+
+* 给string字符串进行赋值
+
+赋值的函数原型：
+
+* ```C++
+  string& operator=(const char* s);		// cahr * 类型字符串，赋值给当前字符串
+  ```
+
+* ```C++
+  string& operator=(const string& s);     // 把字符串 s 赋值给当前字符串
+  ```
+
+* ```C++
+  string& operator=(char c);             	// 字符赋值给当前字符串
+  ```
+
+* ```C++
+  string& assign(const char* s);         	// 把字符串 s 赋值给当前字符串
+  ```
+
+* ```C++
+  string& assign(const char* s, int n);  	// 把字符串 s 的前 n 个字符赋值给当前字符串
+  ```
+
+* ```C++
+  string& assign(const string &s, int n);	// 把已存在变量字符串 s 的第 n 个字符以后的字符串赋值给当前字符串 
+  ```
+
+* ```C++
+  string& assign(const string& s);        // 把字符串 s 赋值给当前字符串
+  ```
+
+* ```C++
+  string& assign(int n, char c);         	// 用 n 个字符 c 赋给当前字符串
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 赋值
+int main()
+{
+    // cahr * 类型字符串，赋值给当前字符串
+	string str1;
+	str1 = "Hello World.";
+	cout << "str1= " << str1 << endl;
+ 	// 把字符串 s 赋值给当前字符串
+	string str2;
+	str2 = str1;
+	cout << "str2= " << str2 << endl;
+	// 字符赋值给当前字符串
+	string str3;
+	str3 = 'a';
+	cout << "str3= " << str3 << endl;
+	// 把字符串 s 赋值给当前字符串
+	string str4;
+	str4.assign("Hello C++123");
+	cout << "str4= " << str4 << endl;
+	// 把字符串 s 的前 n 个字符赋值给当前字符串
+	string str5;
+	str5.assign("Hello C++", 5);
+	cout << "str5= " << str5 << endl;
+	// 把字符串 s 赋值给当前字符串
+	string str6;
+	str6.assign(str5);
+	cout << "str6= " << str6 << endl;
+	// 用 n 个字符 c 赋给当前字符串
+	string str7;
+	str7.assign(10, 'w');
+	cout << "str7= " << str7 << endl;
+	// 把已存在变量字符串 s 的第 n 个字符以后的字符串赋值给当前字符串 
+	string str8;
+	str8.assign(str4, 5);
+	cout << "str8= " << str8 << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.1.4 string字符串拼接**
+
+**功能描述：**
+
+* 实现在符串末尾拼接字符串
+
+**函数原型：**
+
+* ```C++
+  string& operator+=(const char* str); 				// 重载 += 操作符
+  ```
+
+* ```C++
+  string& operator+=(const char c);                  	// 重载 += 操作符
+  ```
+
+* ```C++
+  string& operator+=(const string& str);             	// 重载 += 操作符
+  ```
+
+* ```C++
+  string& append(const char* s);                     	// 把字符串 s 连接到当前字符串结尾
+  ```
+
+* ```C++
+  string& append(const char* s, int n);             	// 把字符串 s 的前 n 个字符连接到当前字符串结尾
+  ```
+
+* ```C++
+  string& append(const string &s);                   	// 同 operator+=(const string& str);
+  ```
+
+* ```C++
+  string& append(const string &s, int pos, int n);  	// 字符串 s 中从 pos 开始的 n 个字符连接到字符串结尾
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 拼接
+int main()
+{
+	string str1 = "I";
+	// 重载 += 操作符
+	str1 += " Love ";
+	// 重载 += 操作符
+	str1 += 'C';
+	string str2("++");
+	// 重载 += 操作符
+	str1 += str2;
+	//把字符串 s 连接到当前字符串结尾
+	str1.append(", Python");
+	//把字符串 s 的前 n 个字符连接到当前字符串结尾
+	str1.append(", C#...", 4);
+	string str3(", C, Java");
+	str1.append(str3);
+	// 字符串 s 中从 pos 开始的 n 个字符连接到字符串结尾
+	string str4(".., MySql;...");
+	str1.append(str4, 2, 8);
+	cout << "str1= " << str1 << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.1.5 string查找和替换**
+
+**功能描述：**
+
+* 查找：查找指定字符串是否存在
+* 替换：在指定的位置替换字符串
+
+**函数原型：**
+
+- ```C++
+  int find(const string& str, int pos = 0) const; 	  	// 查找 str 第一次出现位置， 从 pos 开始查找
+  ```
+
+- ```C++
+  int find(const char* s, int pos = 0) const;            	// 查找 s 第一次出现位置，从 pos 开始查找
+  ```
+
+- ```C++
+  int find(const char* s, int pos, int n) const;         	// 从 pos 位置查找 s 的前 n 个字符第一次位置
+  ```
+
+- ```C++
+  int find(const char c, int pos = 0) const;             	// 查找字符 c 第一次出现的位置
+  ```
+
+- ```C++
+  int rfind(const string& str, int pos = npos) const;   	// 查找 str 最后一次位置，从 pos 开始查找
+  ```
+
+- ```C++
+  int rfind(const char* s, int pos = npos) const;        	// 查找 s 最后一次出现的位置， 从 pos 开始查找
+  ```
+
+- ```C++
+  int rfind(const char* s, int pos, int n) const;        	// 从 pos 查找 s 的前 n 个字符最后一次位置
+  ```
+
+- ```C++
+  int rfind(const char c, int pos = 0) const;           	// 查找字符 c 最后一次出现的位置， 从 pos 开始查找
+  ```
+
+- ```C++
+  string& replace(int pos, int n, const string& str);  	// 替换从 pos 开始的 n 个字符为字符串 str
+  ```
+
+- ```C++
+  string& replace(int pos, int n, const char* s);       	// 替换从 pos 开始的 n 个字符为字符串 s
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string查找和替换**
+int main()
+{
+	string str("abcdefgde");
+	int pos = -1;
+	// 查找
+	pos = str.find("de");
+	cout << "pos: " << pos << endl;
+	// rfind 和 find 区别
+	// rfind 从右往左查，  find 从左往右查
+	pos = str.rfind("de");
+	cout << "pos: " << pos << endl;
+	// 替换
+	str.replace(1, 3, "1111"); // 从 1 号位置起 3个字符 替换为 "1111"
+	cout << "str = " << str << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+* find 查找是从左往右， rfind 从右往左，查找字符串第一次出现的位置
+* find 和 rfind 找到字符串后返回查找的第一个字符位置，找不到返回 -1
+* replace 在替换时，要指定从哪个位置起，多少个字符，替换成什么样的字符串
+
+#### **3.1.6 string字符串比较**
+
+**功能描述：**
+
+* 字符串之间的比较
+
+**比较方式：**
+
+- 字符串比较是按照字符的ASCII码进行对比
+- 相等返回 0 、 大于返回 1 、 小于返回 -1
+
+**函数原型：**
+
+* ```C++
+  int compare(const string &s) const;  // 与字符串 s 比较
+  ```
+
+* ```C++
+  int compare(const char *s) const;     // 与字符串 s 比较
+  ```
+
+  
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 字符串比较
+int main()
+{
+	string str("abcdefg");
+	string str1("abcdef");
+	if (str.compare(str1) < 0)
+	{
+		cout << "str < str1" << endl;
+	}
+	else if (str.compare(str1) > 0)
+	{
+		cout << "str > str1" << endl;
+	}
+	else
+	{
+		cout << "str == str1" << endl;
+	}
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**字符串对比主要用于比较两个字符串是否相等，判断谁大谁小的意义并不是很大
+
+#### **3.1.7 string字符存取**
+
+string 中单个字符存取方式有两种：
+
+- ```C++
+  char& operator[](int n);	//  通过 [] 方式取字符
+  ```
+
+- ```C++
+  char& at(int n);			// 通过 at 方法获取字符
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 字符存取
+int main()
+{
+	string str("abcdefg");
+	cout << "str = " << str << endl;
+
+	// 通过 [] 访问单个字符
+	for (int i = 0; i < str.size(); i++)
+	{
+		cout << " " << str[i];
+	}
+	cout << endl;
+	// 通过 at 方法访问单个字符
+	for (int i = 0; i < str.size(); i++)
+	{
+		cout << " " << str.at(i);
+	}
+	cout << endl;
+	// 修改
+	str[1] = 'x';
+	cout << "str = " << str << endl;
+
+	str.at(0) = 'w';
+	cout << "str = " << str << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.1.8 string插入和删除**
+
+**功能描述：**
+
+- 对 string 字符串进行插入和删除字符操作
+
+**函数原型：**
+
+- ```c++
+  string& insert(int pos, const char* s);		// 插入字符串
+  ```
+
+- ```C++
+  string& insert(int pos, const string& str);	// 插入字符串
+  ```
+
+- ```C++
+  string& insert(int pos, int n, char c);		// 在指定位置插入 n 个字符 c
+  ```
+
+- ```C++
+  string& erase(int pos, int n = npos);		// 删除从 pos 开始的 n 个字符
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 字符串插入和删除
+int main()
+{
+	string str("abcdefg");
+	cout << "str = " << str << endl;
+
+	// 插入
+	str.insert(1, "111");
+	cout << "str = " << str << endl;
+	str.insert(2, 2, 'x');
+	cout << "str = " << str << endl;
+	// 删除
+	str.erase(1, 3);
+	cout << "str = " << str << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.1.9 string子串**
+
+**功能描述：**
+
+- 从字符串中获取想要的子串
+
+**函数原型：**
+
+- ```C++
+  string substr(int pos = 0, int n = npos) const;		// 返回由 pos 开始的 n 个字符组成的字符串
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+
+using namespace std;
+// string 字符串子串
+int main()
+{
+	string str("abcdefg");
+	cout << "str = " << str << endl;
+
+	string substr = str.substr(1, 3);
+	cout << "substr = " << substr << endl;
+
+	string email = "hello@emil.com";
+	int pos = email.find('@');
+	if (pos >= 0)
+	{
+		cout << "emil name: " << email.substr(0, pos) << endl;
+	}
+	else
+	{
+		cout << "not Email." << endl;
+	}
+
+	system("pause");
+	return 0;
+}
+```
+
+### **3.2 vector容器**
+
+#### **3.2.1 vector基本概念**
+
+**功能：**
+
+- vector 数据结构和**数组非常相似**，也称为**单端数组**
+
+**vector 与普通数组区别：**
+
+- 不同之处在于数组是静态空间，而 vector 可以**动态扩展**
+
+**动态扩展：**
+
+- 并不是在原空间之后续接新空间，而是找更大的内存空间，然后将原数据拷贝到新空间，释放原空
+
+  ![Vector容器](Vector容器.png)
+
+- vector 容器的迭代器是支持随机访问的迭代器
+
+#### **3.2.2 vector构造函数**
+
+**功能描述：**
+
+- 创建 vector 容器
+
+**函数原型：**
+
+- ```C++
+  vector<T> v;					// 采用模板实现类实现，默认构造函数
+  ```
+
+- ```C++
+  vector<T>(v.begin(), v.end());		// 将 v[begin(), end()) 区间中的元素拷贝给本身
+  ```
+
+- ```C++
+  vector<T>(n, elem);				// 将构造函数将 n 个 elem 拷贝给本身
+  ```
+
+- ```C++
+  vector<T>(const vector &vec);		// 拷贝构造函数
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> vec)
+{
+	for_each(vec.begin(), vec.end(), [](int value) {
+		cout << " " << value;
+	});
+	cout << endl;
+}
+
+// vector 构造函数
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10; i++)
+	{
+		vec.push_back(i);
+	}
+	printVector(vec);
+
+	vector<int> vec1(vec.begin() + 2, vec.end());
+	printVector(vec1);
+	vector<int> vec2(10, 5);
+	printVector(vec2);
+	vector<int> vec3(vec);
+	printVector(vec3);
+	system("pause");
+	return 0;
+}
+```
+
+#### **3.2.3 vector赋值操作**
+
+**功能描述：**
+
+- 给vector容器进行赋值
+
+**函数原型：**
+
+- ```C++
+  vector& operator=(const vector &vec);		// 重载 = 号操作符
+  ```
+
+- ```C++
+  assign(begin(), end());					// 将[beg, end) 区间中的数据拷贝赋值给本身
+  ```
+
+- ```C++
+  assign(n, elem);						// 将 n 个 elem 拷贝赋值给本身
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> vec)
+{
+	for_each(vec.begin(), vec.end(), [](int value) {
+		cout << " " << value;
+	});
+	cout << endl;
+}
+
+// vector 赋值操作
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10; i++)
+	{
+		vec.push_back(i);
+	}
+	printVector(vec);
+
+	vector<int> vec1 = vec;
+	printVector(vec1);
+	vector<int> vec2;
+	vec2.assign(vec.begin(), vec.end());
+	printVector(vec2);
+	vector<int> vec3;
+	vec3.assign(10, 9);
+	printVector(vec3);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**vector 赋值方式比较简单，使用 operator= ，或者 assign 都可以
+
+#### **3.2.4 vector容量和大小**
+
+**功能描述：**
+
+- 对 vector 容器的容量和大小操作
+
+**函数原型：**
+
+- ```C++
+  bool empty(); 			//判断容器是否为空
+  ```
+
+- ```C++
+  int capacity();			// 容器的容量
+  ```
+
+- ```C++
+  int size();				// 返回容器中元素的个数
+  ```
+
+- ```C++
+  resize(int num);		// 重新指定容器的长度为 num，若容器变长，则以默认值填充新位置，如果容器变短，则末尾超出容器长度的元素被删除
+  ```
+
+- ```C++
+  resize(int num, elem);	// 重新指定容器的长度为 num，若容器变长，则以 elem 值填充新位置，如果容器变短，则末尾超出容器长度的元素被删除
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> vec)
+{
+	for (vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		cout << " " << *it;
+	}
+	//for_each(vec.begin(), vec.end(), [](int value) {
+	//	cout << " " << value;
+	//});
+	cout << endl;
+}
+
+// vector 容量和大小
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10; i++)
+	{
+		vec.push_back(i);
+	}
+	printVector(vec);
+
+	if (vec.empty())
+	{
+		cout << "Vector is Empty." << endl;
+	}
+	else
+	{
+		cout << "Vector is Not Empty." << endl;
+
+		cout << "vec size: " << vec.size() << endl; // 大小
+		cout << "vec capacity: " << vec.capacity() << endl; // 容量 大于等于 大小
+	}
+	// 重新指定大小
+	//vec.resize(15); // 如果重新指定的比原来的长了， 默认用 0 填充
+	//printVector(vec);
+
+	vec.resize(15, 100); // 如果重新指定的比原来的长了， 指定使用 100 填充
+	printVector(vec);
+
+	vec.resize(5);		// 如果重新指定的比原来的短了， 超出的部分被删除
+	printVector(vec);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 判断是否为空 --- empty
+- 返回元素个数 --- size
+- 返回容器容量 --- capacity
+- 重新指定大小 --- resize
+
+#### **3.2.5 vector插入和删除**
+
+**功能描述：**
+
+- 对 vector 容器进行插入、删除操作
+
+**函数原型：**
+
+- ```C++
+  push_back(T elem);									// 尾部插入元素 elem
+  ```
+
+- ```C++
+  pop_back();											// 删除最后一个元素
+  ```
+
+- ```C++
+  insert(const_iterator pos, elem);					// 迭代器指向位置 pos 插入元素 elem 
+  ```
+
+- ```C++
+  insert(const_iterator pos, int count, elem);		// 迭代器指向位置 pos 插入 count 个元素 elem 
+  ```
+
+- ```C++
+  erase(const_iterator start, const_iterator end);	// 删除迭代器从 start 到 end 之间的元素
+  ```
+
+- ```C++
+  clear();										// 删除容器中的所有元素， 清空
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> &vec)
+{
+	for (vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		cout << " " << *it;
+	}
+	//for_each(vec.begin(), vec.end(), [](int value) {
+	//	cout << " " << value;
+	//});
+	cout << endl;
+}
+
+// vector 插入和删除
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10; i++)
+	{
+		// 尾部插入数据
+		vec.push_back(i);
+	}
+	printVector(vec);
+	// 尾部数据被删除
+	vec.pop_back();
+	printVector(vec);
+	// 插入
+	vec.insert(vec.begin() + 1, 100);
+	printVector(vec);
+
+	vec.insert(vec.begin(), 2, 1000);
+	printVector(vec);
+	// 删除
+	vec.erase(vec.begin());
+	printVector(vec);
+
+	vec.erase(vec.begin(), vec.begin() + 3);
+	printVector(vec);
+	// 清空
+    vec.clear();
+    
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 尾插 --- push_back
+- 尾删 --- pop_back
+- 插入 --- insert    (位置迭代器)
+- 删除 --- erase   (位置迭代器)
+- 清空 --- clear
+
+#### **3.2.6 vector数据存取**
+
+**功能描述：**
+
+- 对 vector 中的数据的存取操作
+
+**函数原型：**
+
+- ```C++
+  at(int index);		// 返回索引 index 所指的数据
+  ```
+
+- ```C++
+  operator[](int index);			// 返回索引 index 所指的数据
+  ```
+
+- ```C++
+  front();			// 返回容器中第一个元素
+  ```
+
+- ```C++
+  back();				// 返回容器中最后一个元素
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> &vec)
+{
+	for (vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		cout << " " << *it;
+	}
+	//for_each(vec.begin(), vec.end(), [](int value) {
+	//	cout << " " << value;
+	//});
+	cout << endl;
+}
+
+// vector 数据存取
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10; i++)
+	{
+		// 尾部插入数据
+		vec.push_back(i);
+	}
+	printVector(vec);
+
+	int elem = vec[2];
+
+	int elem1 = vec.at(3);
+	cout << "[2]= " << elem << ",  at(3)= " << elem1 << endl;
+
+	cout << "first= " << vec.front() << ",  end= " << vec.back() << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 除了用迭代器获取 vector 容器中的元素， [] 和 at 也可以
+- front 返回容器的第一个元素
+- back 返回容器中最后一个元素
+
+#### **3.2.7 vector互换容器**
+
+**功能描述：**
+
+- 实现两个容器内元素进行互换
+
+**函数原型：**
+
+- ```C++
+  swap(vec); 	// 将 vec 与本身的元素互换
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printVector(vector<int> &vec)
+{
+	for (vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		cout << " " << *it;
+	}
+	//for_each(vec.begin(), vec.end(), [](int value) {
+	//	cout << " " << value;
+	//});
+	cout << endl;
+}
+
+// vector 数据存取
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	for (int i = 0; i < 10000; i++)
+	{
+		// 尾部插入数据
+		vec.push_back(i);
+	}
+	//cout << "vec= ";
+	//printVector(vec);
+
+	//vector<int> vec1;
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	vec1.insert(vec1.begin() + i, i);
+	//}
+	//cout << "vec1= ";
+	//printVector(vec1);
+	//cout << "swap befor -> after" << endl;
+	//vec1.swap(vec);
+	//cout << "vec= ";
+	//printVector(vec);
+	//cout << "vec1= ";
+	//printVector(vec1);
+	// 可以巧用 swap 可以收缩内存空间
+	cout << "vec capacity:" << vec.capacity() << endl; // 12138
+	cout << "vec size:" << vec.size() << endl; // 10000
+	vec.resize(3);
+	cout << "vec capacity:" << vec.capacity() << endl; // 12138
+	cout << "vec size:" << vec.size() << endl; // 3
+	// vector<int>(vec) 匿名对象  当 匿名对象这行执行完了， 系统会自动帮助回收匿名对象所占的内存
+	vector<int>(vec).swap(vec);
+	cout << "vec capacity:" << vec.capacity() << endl; // 3
+	cout << "vec size:" << vec.size() << endl; // 3
+
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- swap 可以使两个容器互换，可以达到实用的收缩内存效果
+
+#### **3.2.8 vector预留空间**
+
+**功能描述：**
+
+- 减少 vector 在动态扩展容量时的扩展次数
+
+**函数原型：**
+
+- ```C++
+  reserve(int len); 	// 容器预留 len 个元素长度，预留位置不初始化，元素不可访问
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+// vector 预留空间
+int main()
+{
+	vector<int> vec; // 默认构造， 无参构造
+	int capacity = 0;
+	int * p = NULL;
+	int num = 0;
+	vec.reserve(100000);
+	for (int i = 0; i < 100000; i++)
+	{
+		// 尾部插入数据
+		vec.push_back(i);
+		if (p != &vec[0])
+			//if (capacity != vec.capacity())
+		{
+			capacity = vec.capacity();
+			p = &vec[0];
+			num++;
+		}
+	}
+	// 重新开辟的内存次数  reserve 之前：30次   之后：1次
+	cout << "num: " << num << endl;
+	cout << "vec capacity:" << vec.capacity() << endl;
+	cout << "vec size:" << vec.size() << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+### **3.3 deque容器**
 
 
 
