@@ -8,9 +8,11 @@ MongoDB 区分大小写
         ...\bin>mongod --dbpath=D:\MongoDB\data\db
 
 
-    连接数据库：
-        对应安装路径下的
-        ...\bin>mongo.exe
+```mysql
+连接数据库：
+    对应安装路径下的
+    ...\bin>mongo.exe
+```
 
 一、 操作MongoDB数据库
     1. 创建数据库
@@ -19,22 +21,24 @@ MongoDB 区分大小写
         如果创建的数据库不在列表内，如果要显示它我们需要向刚刚创建的数据库中插入一些数据
         db.student.insert({name:"SunHaiLang", age:18, gender:1, address:"Shanghai", phoneNum:"17621958775", isDelete:0})
 
-    2. 删除数据库
-        使用当前数据库
-        db.dropDatabase()
+```mysql
+2. 删除数据库
+    使用当前数据库
+    db.dropDatabase()
 
-    3. 查看所有数据库
-        show dbs
+3. 查看所有数据库
+    show dbs
 
-    4. 查看当前所使用的数据库
-        a. db
-        b. db.getName()
+4. 查看当前所使用的数据库
+    a. db
+    b. db.getName()
 
-    5. 断开连接
-        exit
+5. 断开连接
+    exit
 
-    6. 查看命令api
-        help
+6. 查看命令api
+    help
+```
 
 二、 集合操作
     1. 查看当前数据库集合
@@ -44,7 +48,7 @@ MongoDB 区分大小写
         db.createCollection("集合名")
         document 格式：{key:value, key:value, ...}
         db.集合名.insert(document)
-
+    
     3. 删除当前数据库中的集合
         db.集合名.drop()
 
@@ -59,7 +63,7 @@ MongoDB 区分大小写
             如果不指定_id字段，save() 方法类似于 insert() 方法， 如果指定_id字段，则会更新_id字段的内容
             不指定_id字段: db.student.save({name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
             指定_id字段: db.student.save({_id:ObjectID(""), name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
-
+    
     2. 文档更新
         a. update() 方法更新已存在的文档
             db.集合名.update(query, update, {upset:<boolean>, multi:<boolean>, writeConcern:<document>})
@@ -68,13 +72,13 @@ MongoDB 区分大小写
             upset: 可选, 如果不存在 update 的记录，是否作为新的数据插入 , true 为插入  ,  false 为不插入   默认false
             multi: 可选, MongoDB 默认是false, 如果只更新找到的第一条数据,  如果是 true 就按照条件查找出来的数据全部更新
             writeConcern： 可选, 表示抛出异常的级别
-
+    
         b. save() 方法通过传入的文档替换已存在的文档
             db.集合名.save(<document>, {writeConcern:<document>})
             document: 文档数据
             writeConcern: 可选, 表示抛出异常
             指定_id字段: db.student.save({_id:ObjectID(""), name:"LiSi", age:22, gender:1, address:"HangZhou", phoneNum:"15875963232", isDelete:0})
-
+    
     3. 文档删除
 
 

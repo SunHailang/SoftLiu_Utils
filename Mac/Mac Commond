@@ -18,6 +18,7 @@
 7、 引用类库
 	dotnet add 工程名字 reference ./类库名.Library/
 8、 运行工程
+
 	1. dotnet build 	# 在解决方案下是Build整个解决方案, cd 到工程内是Build工程(建议Build整个解决方案, 防止有类库的改变)
 	2. dotnet restore 
 	3. dotnet run		# 这个需要 cd 到具体的项目下才能执行
