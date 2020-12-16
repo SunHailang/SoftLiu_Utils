@@ -5861,7 +5861,457 @@ int main()
 
 ### **3.8 map和multimap容器**
 
+#### **3.8.1 map基本概念**
 
+**简介：**
+
+- map 中所有元素都是 pair
+- pair 中的第一个元素为 key (键值)，起到索引作用，第二个元素为 value (实值)
+- 所有的元素都会根据元素的键值自动排序
+
+**本质：**
+
+- map 和 multimap 属于**关联式容器**，底层结构是用**二叉树**实现。
+
+**优点：**
+
+- 可以根据 key 值快速查找 value 值
+
+**map 和 multimap 区别：**
+
+- map 不允许容器中有重复 key 值元素
+- multimap 允许容器中有重复 key 值元素
+
+#### **3.8.2 map构造和赋值**
+
+**功能描述：**
+
+- 对 map 容器进行构造和赋值
+
+**函数原型：**
+
+- **构造：**
+
+  - ```C++
+    map<T1, T2> mp;			// map 默认构造函数
+    ```
+
+  - ```C++
+    map(const map &mp);		// 拷贝构造函数
+    ```
+
+- **赋值：**
+
+  - ```C++
+    map& operator=(const map &mp);	// 重载等号操作符
+    ```
+
+**示例：**
+
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class Person {
+public:
+	Person(string name)
+	{
+		this->m_Name = name;
+	}
+	string m_Name;
+};
+
+void printMap(const map<string, Person> &mp)
+{
+	for (map<string, Person>::const_iterator it = mp.begin(); it != mp.end(); it++)
+	{
+		cout << "Key: " << (*it).first << ", Value: " << (*it).second.m_Name << endl;
+	}
+	cout << "-------------------------------------" << endl;
+}
+
+int main()
+{
+	// 默认排序 升序
+	map<string, Person> mp;
+	mp.insert(pair<string, Person>("1001", Person("Tom")));
+	mp.insert(pair<string, Person>("1013", Person("Jack")));
+	mp.insert(pair<string, Person>("1002", Person("Jame")));
+	mp.insert(pair<string, Person>("1005", Person("Mack")));
+	printMap(mp);
+	// 拷贝构造
+	map<string, Person> mp2(mp);
+	printMap(mp2);
+	// 赋值
+	map<string, Person> mp3 = mp;
+	printMap(mp3);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**map 中所有元素都是成对出现，插入数据时候要使用对组 pair
+
+#### **3.8.3 map大小和交换**
+
+**功能描述：**
+
+- 统计 map 容器大小以及交换 map 容器
+
+**函数原型：**
+
+- ```C++
+  int size();		// 返回容器中元素的个数
+  ```
+
+- ```C++
+  bool empty();	// 判断容器是否为空
+  ```
+
+- ```C++
+  swap(mp);		// 交换两个集合容器
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class Person {
+public:
+	Person(string name)
+	{
+		this->m_Name = name;
+	}
+	string m_Name;
+};
+
+void printMap(const map<string, Person> &mp)
+{
+	for (map<string, Person>::const_iterator it = mp.begin(); it != mp.end(); it++)
+	{
+		cout << "Key: " << (*it).first << ", Value: " << (*it).second.m_Name << endl;
+	}
+	cout << "-------------------------------------" << endl;
+}
+
+int main()
+{
+	// 默认排序 升序
+	map<string, Person> mp;
+	mp.insert(pair<string, Person>("1001", Person("Tom")));
+	mp.insert(pair<string, Person>("1013", Person("Jack")));
+	mp.insert(pair<string, Person>("1002", Person("Jame")));
+	mp.insert(pair<string, Person>("1005", Person("Mack")));
+
+	cout << "Size: " << mp.size() << endl;
+	cout << "Empty: " << (mp.empty() ? "True" : "False") << endl;
+
+	printMap(mp);
+	cout << "swap befor" << endl;
+	// 交换
+	map<string, Person> mp2;
+	mp2.insert(pair<string, Person>("1020", Person("Zhang")));
+	printMap(mp2);
+	cout << "swap after" << endl;
+	mp.swap(mp2);
+	printMap(mp);
+	printMap(mp2);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 统计大小  ---  size
+- 判断是否为空  ---  empty
+- 交换容器  ---  swap
+
+#### **3.8.4 map插入和删除**
+
+**功能描述：**
+
+- 对 map 容器进行插入和删除数据
+
+**函数原型：**
+
+- ```C++
+  insert(elem);		// 在容器中插入元素
+  ```
+
+- ```C++
+  clear();			// 清除所有元素
+  ```
+
+- ```C++
+  erase(pos);			// 删除 pos 迭代器所指的元素，返回下一个元素的迭代器
+  ```
+
+- ```C++
+  erase(begin(), end());	// 删除区间 [begin(), end()) 的所有元素，返回下一个元素的迭代器
+  ```
+
+- ```C++
+  erase(key);				// 删除容器中值为 key 的元素
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class Person {
+public:
+	Person()
+	{
+
+	}
+	Person(string name)
+	{
+		this->m_Name = name;
+	}
+	string m_Name;
+};
+
+void printMap(const map<string, Person> &mp)
+{
+	for (map<string, Person>::const_iterator it = mp.begin(); it != mp.end(); it++)
+	{
+		cout << "Key: " << (*it).first << ", Value: " << (*it).second.m_Name << endl;
+	}
+	cout << "-------------------------------------" << endl;
+}
+
+int main()
+{
+	// 默认排序 升序
+	map<string, Person> mp;
+	mp.insert(pair<string, Person>("1001", Person("Tom")));
+	mp.insert(make_pair("10013", Person("Jack")));
+	mp.insert(map<string, Person>::value_type("1002", Person("Jame")));
+	// 不建议使用这样的方式插入数据,
+	mp["1005"] = Person("Mack");
+
+	// 这样输入一个元素，如果 key 不存在 则会在 map 容器中创建，并赋值给一个默认参数
+	//cout << mp["001"].m_Name << endl;
+
+	printMap(mp);
+
+	mp.erase(mp.begin());
+	printMap(mp);
+
+	mp.erase("002");
+	printMap(mp);
+
+	mp.erase(++mp.begin(), --mp.end());
+	printMap(mp);
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- map 容器插入方式有很多种，记住一种即可
+- 插入  ---  insert
+- 删除  ---  erase
+- 清空  ---  clear
+
+#### **3.8.5 map查找和统计**
+
+**功能描述：**
+
+- 对 map 容器进行查找数据以及统计数据
+
+**函数原型：**
+
+- ```C++
+  find(key);		// 查找 key 是否存在，若存在，返回该键的元素的迭代器； 若不存在，返回 map.end()
+  ```
+
+- ```C++
+  count(key);		// 统计 key 的元素个数
+  ```
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+class Person {
+public:
+	Person()
+	{
+
+	}
+	Person(string name)
+	{
+		this->m_Name = name;
+	}
+	string m_Name;
+};
+
+void printMap(const map<string, Person> &mp)
+{
+	for (map<string, Person>::const_iterator it = mp.begin(); it != mp.end(); it++)
+	{
+		cout << "Key: " << (*it).first << ", Value: " << (*it).second.m_Name << endl;
+	}
+	cout << "-------------------------------------" << endl;
+}
+
+int main()
+{
+	// 默认排序 升序
+	map<string, Person> mp;
+	mp.insert(pair<string, Person>("1001", Person("Tom")));
+	mp.insert(make_pair("10013", Person("Jack")));
+	mp.insert(map<string, Person>::value_type("1002", Person("Jame")));
+
+	map<string, Person>::iterator mpIt = mp.find("1002");
+	if (mpIt != mp.end())
+	{
+		// 存在
+		cout << "key:" << mpIt->first << ", value: " << mpIt->second.m_Name << endl;
+	}
+	else
+	{
+		// 不存在
+		cout << "key not exist" << endl;
+	}
+	// 对于 map 容器， count 返回只有 0或者1， 因为map容器不允许重复的key插入
+	// multimap 容器 可以有其他值
+	int keyCount = mp.count("1001");
+	cout << "key 1001 count: " << keyCount << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 查找  ---  find   (返回的是一个迭代器)
+- 统计  ---  count  (对于 map，结果为0或者1)
+
+#### **3.8.6 map容器排序**
+
+**学习目标：**
+
+- map 容器默认排序规则是按照 key 值进行从小到大排序，掌握如何改变排序规则
+
+**主要技术点：**
+
+- 利用仿函数，可以改变排序规则
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+class Person {
+public:
+	Person()
+	{
+
+	}
+	Person(string name)
+	{
+		this->m_Name = name;
+	}
+	string m_Name;
+};
+
+class myCompare
+{
+public:
+	// 重载 () 操作符 ， 实现仿函数功能
+	bool operator()(string a, string b)
+	{
+		return a > b;
+	}
+};
+
+int main()
+{
+	// 默认排序 升序,
+	map<string, Person> mp;
+	mp.insert(pair<string, Person>("1001", Person("Tom")));
+	mp.insert(make_pair("10013", Person("Jack")));
+	mp.insert(map<string, Person>::value_type("1002", Person("Jame")));
+	for_each(mp.begin(), mp.end(), [](pair<string, Person> value) {
+		cout << "Key: " << value.first << ", Value: " << value.second.m_Name << endl;
+	});
+	cout << "-------------------------------------" << endl;
+	// 传入仿函数  实现降序排列
+	map<string, Person, myCompare> mp1;
+	mp1.insert(pair<string, Person>("1001", Person("Tom")));
+	mp1.insert(make_pair("10013", Person("Jack")));
+	mp1.insert(map<string, Person>::value_type("1002", Person("Jame")));
+	for_each(mp1.begin(), mp1.end(), [](pair<string, Person> value) {	
+		cout << "Key: " << value.first << ", Value: " << value.second.m_Name << endl;
+	});
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 利用仿函数可以指定 map 容器的排序规则
+- 利用自定义数据类型，map 必须要指定排序规则，同 set 容器
+
+***
+
+***
+
+## **4. STL - 函数对象**
+
+### **4.1 函数对象**
+
+#### **4.1.1 函数对象概念**
+
+**概念：**
+
+- 重载**函数调用操作符**的类，其对象常称为**函数对象**
+- **函数对象**使用重载 () 时，行为类似函数调用，也叫**仿函数**
+
+**本质：**
+
+- 函数对象（仿函数）是一个类，不是一个函数
+
+#### **4.1.2 函数对象使用**
+
+**特点：**
+
+- 函数对象在使用时，可以像普通函数那样调用，也可以有参数，可以有返回值
+- 函数对象超出普通函数的概念，函数对象可以有自己的状态
+- 函数对象可以作为参数传递
 
 
 
