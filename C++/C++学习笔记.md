@@ -6313,9 +6313,204 @@ int main()
 - 函数对象超出普通函数的概念，函数对象可以有自己的状态
 - 函数对象可以作为参数传递
 
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+using namespace std;
 
 
+// 函数对象  （仿函数）
 
+class MyAdd
+{
+public:
+	int operator()(int a, int b)
+	{
+		return a + b;
+	}
+};
+
+class MyPrint
+{
+public :
+	MyPrint()
+	{
+		this->m_times = 0;
+	}
+	void operator()(string msg)
+	{
+		cout << msg << endl;
+		m_times++;
+	}
+	int m_times = 0;
+};
+
+void Print(MyPrint &mp, string msg)
+{
+	mp(msg);
+}
+
+int main()
+{
+	// 函数对象在使用的时候，可以像普通函数一样调用，可以有参数，可以有返回值
+	MyAdd myadd;
+	cout << myadd(4, 6) << endl;
+	cout << "-------------------------------------" << endl;
+	// 函数对象超出普通函数的概念，函数对象可以有自己的状态
+	MyPrint myPrint;
+	myPrint("Hello World.");
+	myPrint("Hello World.");
+	myPrint("Hello World.");
+	cout << "MyPrint Times: " << myPrint.m_times << endl;
+	cout << "-------------------------------------" << endl;
+	// 函数对象可以作为参数传递
+	MyPrint myPrint1;
+	Print(myPrint1, "Hello C++.");
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**
+
+- 仿函数的写法非常灵活，可以作为参数进行传递。
+
+***
+
+### **4.2 谓词**
+
+#### **4.2.1 谓词概念**
+
+**概念：**
+
+- 返回 bool 类型的仿函数称为**谓词**
+- 如果 operator() 接收一个参数，那么叫做**一元谓词**
+- 如果 operator() 接受两个参数，那么叫做**二元谓词**
+
+#### **4.2.2 一元谓词**
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 谓词  ->（仿函数的返回值类型是 bool 类型）
+class GreateFive
+{
+public:
+	// 一元谓词
+	bool operator()(int value)
+	{
+		return value > 5;
+	}
+};
+int main()
+{
+	vector<int> vec;
+	for (int i = 0; i < 10; i++)
+	{
+		vec.push_back(i);
+	}
+	// 查找容器中有没有大于5的
+	vector<int>::iterator it = find_if(vec.begin(), vec.end(), GreateFive());
+	if (it == vec.end())
+	{
+		cout << "not find" << endl;
+	}
+	else
+	{
+		cout << "find, value: " << (*it) << endl;
+	}
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**参数只有一个的返回值为 bool 类型的仿函数，称为**一元谓词**
+
+#### **4.2.3 二元谓词**
+
+**示例：**
+
+```C++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 谓词  ->（仿函数的返回值类型是 bool 类型）
+class MyCompare
+{
+public:
+	// 二元谓词
+	bool operator()(int value1, int value2)
+	{
+		return value1 > value2;
+	}
+};
+int main()
+{
+	vector<int> vec;
+	for (int i = 0; i < 10; i++)
+	{
+		vec.push_back(i);
+	}
+	vec.push_back(15);
+	vec.push_back(10);
+	vec.push_back(6);
+	// 默认升序排列
+	sort(vec.begin(), vec.end());
+	for_each(vec.begin(), vec.end(), [](int value) {
+		cout << value<<" ";
+	});
+	cout << endl;
+	cout << "------------------------------" << endl;
+	sort(vec.begin(), vec.end(), MyCompare());
+	//sort(vec.begin(), vec.end(), [](int value1, int value2)->bool {
+	//	return value1 > value2;
+	//});
+	for_each(vec.begin(), vec.end(), [](int value) {
+		cout << value << " ";
+	});
+	cout << endl;
+
+	system("pause");
+	return 0;
+}
+```
+
+**总结：**参数有两个的返回值为 bool 类型的仿函数，称为**二元谓词**
+
+***
+
+### **4.3 内建函数对象**
+
+#### **4.3.1 内建函数对象意义**
+
+**概念：**
+
+- STL 内建了一些函数对象
+
+**分类：**
+
+- 算术仿函数
+- 关系仿函数
+- 逻辑仿函数
+
+**用法：**
+
+- 这些仿函数所产生的对象，用法和一般函数完全相同
+- 使用内建函数对象，需要引入头文件 #include<functional>
+
+#### **4.3.2 算术仿函数**
 
 
 
