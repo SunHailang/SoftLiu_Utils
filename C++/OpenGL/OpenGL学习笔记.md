@@ -1,5 +1,11 @@
 <h1 align="center"><b><p>OpenGL学习笔记</p></b></h1>
 
+***
+
+**注：本文基于 glfw 和 glad 库编写**
+
+***
+
 # **1. OpenGL 入门**
 
 ```C++
