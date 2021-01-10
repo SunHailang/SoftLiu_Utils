@@ -48,6 +48,162 @@ Ctrl + Shift + I 	// 插入图片
 
 
 
+## **常用公式的代码**
+
+- **上/下标**
+
+  | **算式** | Markdowm |
+  | -------- | -------- |
+  | $x^2$    | x^2      |
+  | $y_1$    | y_1      |
+
+- **分式**
+
+  | **算式**      | Markdowm    |
+  | ------------- | ----------- |
+  | $1/2$         | 1/2         |
+  | $\frac{1}{2}$ | \frac{1}{2} |
+
+- **省略号**
+
+  | **省略号** | Markdown |
+  | ---------- | -------- |
+  | $\cdots$   | \cdots   |
+
+- **开根号**
+
+  | **算式**   | Markdown |
+  | ---------- | -------- |
+  | $\sqrt{2}$ | \sqrt{2} |
+
+- **矢量**
+
+  | **算式**  | Markdown |
+  | --------- | -------- |
+  | $\vec{a}$ | \vec{a}  |
+
+- **积分**
+
+  | **算式**            | Markdown       |
+  | ------------------- | -------------- |
+  | $\int{x}dx$         | \int{x}dx      |
+  | $\int_{1}^{2}{x}dx$ | \int_{1}^{2}dx |
+
+- **极限**
+
+  | **算式**                     | Markdown                   |
+  | ---------------------------- | -------------------------- |
+  | $\lim_{a+b}$                 | \lim_{a+b}                 |
+  | $\lim_{n\rightarrow+\infty}$ | \lim_{n\rightarrow+\infty} |
+
+- **累加**
+
+  | **算式**                | Markdown              |
+  | ----------------------- | --------------------- |
+  | $\sum{x}$               | \sum{a}               |
+  | $\sum_{m=1}^{100}{a_n}$ | \sum_{m=1}^{100}{a_n} |
+
+- **累乘**
+
+  | **算式**                | Markdown              |
+  | ----------------------- | --------------------- |
+  | $\prod{x}$              | \prod{x}              |
+  | $\prod_{n=1}^{99}{x_n}$ | \prod_{n=1}^{99}{x_n} |
+
+- **希腊字母**
+
+  | **大写** | Markdown   | **小写**      | Markdown    |
+  | -------- | ---------- | ------------- | ----------- |
+  | A        | $A$        | $\alpha$      | \alpha      |
+  | B        | $B$        | $\beta$       | \beta       |
+  | Γ        | $\Gamma$   | $\gamma$      | \gamma      |
+  | Δ        | $\Delta$   | $\delta$      | \delta      |
+  | E        | $E$        | $\epsilon$    | \epsilon    |
+  |          |            | $\varepsilon$ | \varepsilon |
+  | Z        | $Z$        | $\zeta$       | \zeta       |
+  | H        | $H$        | $\eta$        | \eta        |
+  | Θ        | $\Theta$   | $\theta$      | \theta      |
+  | I        | $I$        | $\iota$       | \iota       |
+  | K        | $K$        | $\kappa$      | \kappa      |
+  | Λ        | $\Lambda$  | $\lambda$     | \lambda     |
+  | M        | $M$        | $\mu$         | \mu         |
+  | N        | $N$        | $\nu$         | \nu         |
+  | Ξ        | $\Xi$      | $\xi$         | \xi         |
+  | O        | $O$        | $\omicron$    | \omicron    |
+  | Π        | $\Pi$      | $\pi$         | \pi         |
+  | P        | $P$        | $\rho$        | \rho        |
+  | Σ        | $\Sigma$   | $\sigma$      | \sigma      |
+  | T        | $T$        | $\tau         | \tau        |
+  | Υ        | $\Upsilon$ | $\upsilon$    | \upsilon    |
+  | Φ        | $\Phi$     | $\phi         | \phi        |
+  |          |            | $\varphi$     | \varphi     |
+  | X        | $X$        | $\chi$        | \chi        |
+  | Ψ        | $\Psi$     | $\psi$        | \psi        |
+  | Ω        | $\Omega$   | $\omega$      | \omega      |
+
+- **三角函数**
+
+  | **三角函数** | Markdown |
+  | ------------ | -------- |
+  | $\sin$       | \sin     |
+
+- **对数函数**
+
+  | **算式**  | Markdown |
+  | --------- | -------- |
+  | $\ln2$    | \ln2     |
+  | $\log_28$ | \log_28  |
+  | $\lg10$   | \lg10    |
+
+- **关系运算符**
+
+  | 运算符   | Markdown |
+  | -------- | -------- |
+  | $\pm$    | \pm      |
+  | $\times$ | \times   |
+  | $\cdot$  | \cdot    |
+  | $\div$   | \div     |
+  | $\neq$   | \neq     |
+  | $\equiv$ | \equiv   |
+  | $\leq$   | \leq     |
+  | $\geq$   | \geq     |
+
+- **其它特殊字符**
+
+  | 符号         | Markdown   |
+  | ------------ | ---------- |
+  | $\forall$    | \forall    |
+  | $\infty$     | \infty     |
+  | $\emptyset$  | \emptyset  |
+  | $\exists$    | \exists    |
+  | $\nabla$     | \nabla     |
+  | $\bot$       | \bot       |
+  | $\angle$     | \angle     |
+  | $\because$   | \because   |
+  | $\therefore$ | \therefore |
+
+- **花括号**
+  $$
+  c(u)=\begin{cases} \sqrt\frac{1}{N}，u=0\\ \sqrt\frac{2}{N}， u\neq0\end{cases}
+  $$
+
+- **空格**
+  $$
+  a\quad b
+  $$
+
+- **矩阵**
+  $$
+  a = \left[
+  \matrix{
+    \alpha_1 & test1\\
+    \alpha_2 & test2\\
+    \alpha_3 & test3 
+  }
+  \right]
+  $$
+  
+
 
 
 
