@@ -1302,3 +1302,12 @@ glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // 很低的影响
 lightingShader.setVec3("light.ambient", ambientColor);
 lightingShader.setVec3("light.diffuse", diffuseColor);
 ```
+
+***
+
+# **10. 光照贴图**
+
+引入**漫反射**和**镜面光**贴图(Map)。这允许我们对物体的漫反射分量（以及间接地对环境光分量，它们几乎总是一样的）和镜面光分量有着更精确的控制。
+
+## **10.1 漫反射贴图**
+
