@@ -135,7 +135,7 @@ Ctrl + Shift + I 	// 插入图片
   | Σ        | $\Sigma$   | $\sigma$      | \sigma      |
   | T        | $T$        | $\tau         | \tau        |
   | Υ        | $\Upsilon$ | $\upsilon$    | \upsilon    |
-  | Φ        | $\Phi$     | $\phi         | \phi        |
+  | Φ        | $\Phi$     | $\phi$        | \phi        |
   |          |            | $\varphi$     | \varphi     |
   | X        | $X$        | $\chi$        | \chi        |
   | Ψ        | $\Psi$     | $\psi$        | \psi        |
