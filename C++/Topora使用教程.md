@@ -203,8 +203,32 @@ Ctrl + Shift + I 	// 插入图片
   \right]
   $$
   
+- 在字母上方添加符号
+  $$
+  \overline{C}
+  $$
 
+  $$
+  \widehat{G}
+  $$
 
+  $$
+  \hat{G}
+  $$
+
+  $$
+  \widetilde{G}
+  $$
+
+  $$
+  \dot{G}
+  $$
+
+  $$
+  \ddot{G}
+  $$
+
+  
 
 
 
