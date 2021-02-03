@@ -650,13 +650,74 @@ int main(int argc, char *argv[])
   	在编译中要加 -lpthread 参数
   	例：gcc thread.c -o thread -lpthread
 
+***
+
+# **8. 原始套接字**
+
+**概述(SOCK_RAW)：**
+
+1. 一种不同于SOCK_STREAM、SOCK_DGRAM的套接字，它实现于系统核心
+2. 可以接收本机往卡上所有的数据帧(数据包)，对于监听网络流量和分析网络数据很有作用
+3. 开发人员可以发送自己组装的数据包到网络上
+4. 广泛应用于高级网络编程
+5. 网络专家、黑客常会用此来编写奇特的网络程序
+
+**原始套接字可以收发：**
+
+1. 内核没有处理的数据包，因此要访问其它协议
+2. 发送的数据需要使用，原始套接字(SOCK_RAW)
+
+## 8.1 创建原始套接字
+
+```c
+/*
+	功能：创建链路层的原始套接字
+	参数：
+		protocol	附加协议
+			#include <netinet/ether.h>
+			ETH_P_ALL	所有协议的数据包
+			ETH_P_IP	ip数据包
+			ETH_P_ARP	arp数据包
+	返回值：
+		成功：文件描述符
+		失败：-1
+*/
+int socket(PF_PACKET, SOCK_RAW, protocol);
+```
+
+**案例：**
+
+```c
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <netinet/ether.h>
+
+int main(int argc, char *argv[])
+{
+    // socket
+    int sockfd;
+    if((sockfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) == -1)
+    {
+        perror("failed to create socket");
+        exit(1);
+    }
+    printf("sockfd = %d\n", sockfd);
 
 
+    // close
+    close(sockfd);
+    return 0;
+}
+```
 
+**注意：**
 
-
-
-
+- 执行原始套接字需要管理员权限
 
 
 
