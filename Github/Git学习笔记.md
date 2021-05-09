@@ -112,6 +112,20 @@ git rm --cached [file]
 git mv [file-original] [file-renamed]
 ```
 
+\# 添加子模块
+
+```
+git submodule add  仓库地址   路径
+```
+
+\# 下载子模块
+
+```
+git submodule update --init --recursive
+```
+
+
+
 ***
 
 # **四、代码提交**
