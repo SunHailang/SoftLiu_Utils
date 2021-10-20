@@ -342,6 +342,10 @@ git log
 
 ```
 git log --stat
+git log --graph
+
+// 可列出文件的所有改动历史 (直接进入文件所在的目录)
+git log --pretty=oneline 文件名
 ```
 
  \# 搜索提交历史，根据关键词
@@ -736,7 +740,9 @@ git checkout -b newBrach origin/master
 此外，也可以使用git merge命令或者git rebase命令，在本地分支上合并远程分支。
 
 ```
-git merge origin/master 
+git merge origin/master  //默认情况下，Git执行"快进式合并"（fast-farward merge）
+// 使用--no-ff参数后，会执行正常合并，为了保证版本演进的清晰，建议采用这种方法。
+git merge --no-ff origin/master
 ```
 
 \# 或者
