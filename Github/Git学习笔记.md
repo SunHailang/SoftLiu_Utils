@@ -743,6 +743,11 @@ git checkout -b newBrach origin/master
 git merge origin/master  //默认情况下，Git执行"快进式合并"（fast-farward merge）
 // 使用--no-ff参数后，会执行正常合并，为了保证版本演进的清晰，建议采用这种方法。
 git merge --no-ff origin/master
+
+// 合并策略：resolve、recursive、octopus、ours、subtree
+// 参数： ours、theirs、patience、no-renames
+git merge 要合并进来的分支名 -s 合并策略 -X 参数
+
 ```
 
 \# 或者
