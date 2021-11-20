@@ -608,9 +608,13 @@ git revert [commit]
  \# 暂时将未提交的变化移除，稍后再移入
 
 ```
+# 暂存工作区文件
 git stash
-
-git stash pop
+# 取出暂存区的栈顶:
+# 1. pop 删除栈顶
+# 2. apply 除了不删除，其他功能和pop一样
+# 3. delete 直接删除
+git stash [<options>] [-q -- 仅仅退出]
 ```
 
  \2. 本地新增了一堆文件(并没有git add到暂存区)，想放弃修改。
