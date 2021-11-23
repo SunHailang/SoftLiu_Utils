@@ -750,7 +750,7 @@ git merge --no-ff origin/master
 
 // 合并策略：resolve、recursive、octopus、ours、subtree
 // 参数： ours、theirs、patience、no-renames
-git merge 要合并进来的分支名 -s 合并策略 -X 参数
+git merge 要合并进来的分支名 合并策略 -X 参数
 
 ```
 
