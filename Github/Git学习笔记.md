@@ -200,6 +200,7 @@ $ git branch [branch-name]
 
 ```
 git checkout -b [branch]
+git checkout -b [本地分支名] [远程分支名] // eg: git checkout -b newbranch origin/newbranch
 ```
 
  \# 新建一个分支，指向指定commit
