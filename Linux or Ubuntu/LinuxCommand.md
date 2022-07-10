@@ -64,53 +64,76 @@
 		  按文件内容查找
 			a. grep -r "查找的内容" [查找的路径]
 ## 文件压缩和解压
-		1. gzip [文件路径]  只能压缩文件不能压缩目录
+1. gzip [文件路径]  只能压缩文件不能压缩目录
 			gunzip [文件路径]  后缀名: .gz
-		2. bzip2 [文件路径] 
+
+2. bzip2 [文件路径] 
 			bunzip2 [文件路径]  后缀名： .bz2
-		3. tar 压缩文件 (不使用z/j参数，该命令只能对文件或目录打包)
-			参数： c -- 创建(压缩) ， x -- 释放(解压缩) ， v -- 显示提示信息 ， f -- 指定压缩文件的名字 ， z -- 使用gzip的方式压缩文件(.gz) , j -- 使用bzip2的方式压缩文件(.bz2)
-			压缩： tar zcvf 生成的压缩包的名字(***.tar.gz) 要压缩的文件或目录
-				  tar jcvf 生成的压缩包的名字(***.tar.bz2) 要压缩的文件或目录
-			解压缩： tar (z/j)xvf 压缩包的名字(解压到当前文件目录)
-					tar (z/j)xvf 压缩包的名字(解压到指定文件目录) -C 指定解压的路径
-		4. rar 压缩文件
+
+3. tar 压缩文件 (不使用z/j参数，该命令只能对文件或目录打包)
+    - 参数： 
+     	- c -- 创建(压缩)
+     	- x -- 释放(解压缩)
+     	- v -- 显示提示信息
+     	- f -- 指定压缩文件的名字
+     	- z -- 使用gzip的方式压缩文件(.gz)
+     	- j -- 使用bzip2的方式压缩文件(.bz2)
+	
+	- 压缩： 
+    	- tar zcvf 生成的压缩包的名字(*.tar.gz) 要压缩的文件或目录
+    	- tar jcvf 生成的压缩包的名字(*.tar.bz2) 要压缩的文件或目录
+			
+	- 解压缩： 
+    	- tar (z/j)xvf 压缩包的名字(解压到当前文件目录)
+		- tar (z/j)xvf 压缩包的名字(解压到指定文件目录) -C 指定解压的路径
+
+4. rar 压缩文件
 			参数： a -- 压缩 ， x -- 解压缩
 			压缩： rar a 生成的压缩文件的名字(temp) 压缩的文件或目录
 			解压缩： rar x 压缩文件名 (解压缩目录)
-		5. zip 压缩文件
+
+5. zip 压缩文件
 			参数： -r 递归压缩
 			压缩： zip 压缩包的名字 压缩的文件或目录
 			解压缩： unzip 压缩包的名字(解压到当前文件目录)
 					unzip 压缩包的名字 -d 指定的解压缩目录
 					
 ## 进程管理
-		1. ps 命令
-			1. a 所有用户
-			2. u 
-			3. x 没有终端的用户
-		2. kill 杀进程(通过PID)
+1. ps 命令
+	- a 所有用户
+	- u 
+	- x 没有终端的用户
+
+2. kill 杀进程(通过PID)
 		
-		3. evn 查看所有的环境变了
+3. evn 查看所有的环境变了
 		
-		4. top 相当于任务管理器
+4. top 相当于任务管理器
 		
 ## 网络相关命令
-		1. ifconfig 查看当前的IP信息
-		2. ping IP地址 -c 数量(4)
-		3. nslookup 域名 -- 查看当前域名对应的IP地址
+1. ifconfig 查看当前的IP信息
+
+2. ping IP地址 -c 数量(4)
+
+3. nslookup 域名 -- 查看当前域名对应的IP地址
 		
 ## 用户管理
-		1. 创建用户 -- sudo adduser 用户名(用户名不能用大写字母)
-				   -- sudo useradd -s /bin/bash -g hlsun(用户组名) -d /home/hlsun -m hlsun
+1. 创建用户  
+   - sudo adduser 用户名(用户名不能用大写字母)
+   - sudo useradd -s /bin/bash -g hlsun(用户组名) -d /home/hlsun -m hlsun
 				   
-		2. 添加用户组 -- sudo groupadd 用户组名
+2. 添加用户组
+   - sudo groupadd 用户组名
 		
-		3. 修改用户密码 -- sudo passwd 用户名(指定用户)
+3. 修改用户密码
+   - sudo passwd 用户名(指定用户)
 			修改当前用户的密码 -- passwd
 			修改root用户的密码
 			
-		4. 删除用户 -- sudo deluser 用户名
-					-- sudo deluser -r 用户名
-				查看当前所有用户 -- 
+4. 删除用户
+   - sudo deluser 用户名
+   - sudo deluser -r 用户名
+  
+5. 查看当前所有用户
+   - TODO 
 		
