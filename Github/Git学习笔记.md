@@ -636,7 +636,71 @@ git clean -xdf
 
 ***
 
-# **十、其他**
+# **十、LFS配置**
+```
+git lfs install
+
+git lfs track "*.zip" //或者其他后缀的文件  
+git lfs untrack "*.ogg" // 取消track
+
+// 对于已经存在仓库的文件 进行迁移
+git lfs migrate mode [options] [--] [branch ...]
+
+mode: import/export
+options: 
+  -I paths -> --include=paths
+  -X paths -> --exclude=paths
+  --include-ref=refname
+  --exclude-ref=refname
+  --skip-fetch
+  --everything :代表所有本地分支
+  --yes :自动重写提交记录
+eg:
+git lfs migrate import --include="*.bin,*.lib" --everything // (代表本地所以的分支)
+git lfs migrate export --include="*.bin,*.lib" --everything // (代表本地所以的分支)
+// 查看哪些文件被转成了lfs文件
+git lfs ls-files
+
+git push --force --all
+
+// 测试修剪操作将产生什么效果
+git lfs prune --dry-run
+// 命令精确查看哪些 Git LFS 对象将被修剪
+git lfs prune --verbose --dry-run
+
+// 当本地仓库积攒了比较多版本的LFS导致体积较大的时候，可以通过以下命令进行清理：
+git lfs prune
+
+//加快拉取速度  配置:alias.plfs  当需要下载大量的 Git LFS 文件时，这将大大提高性能
+git config alias.plfs "!git -c filter.lfs.smudge= -c filter.lfs.required=false pull && git lfs pull"
+git plfs
+
+// 获取额外的 Git LFS 历史记录
+
+
+// How to resolve ‘fatal: refusing to merge unrelated histories’
+--allow-unrelated-histories 解决方案
+
+git lfs fetch --recent
+
+```
+
+```
+// 查看可清理的未被引用的对象
+git prune -n
+// 查看悬空的对象
+git fsck
+
+//清理git的未被引用的对象
+git prune
+
+// 清理
+git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc "$@"
+
+```
+
+
+# **十一、其他**
 
  \# 生成一个可供发布的压缩包
 
