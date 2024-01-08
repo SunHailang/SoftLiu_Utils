@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# MYSQL 命令行：
 
 以管理员身份运行cmd
 启动服务：
@@ -11,7 +11,9 @@
 查看当前时间： select now();
 远程连接： mysql -h ip地址 -u 用户名 -p   密码******
 
-数据库操作：
+
+
+## 1. 数据库操作：
 
 
 ```mysql
@@ -73,8 +75,12 @@
 	LONGTEXT	0-4 294 967 295 bytes	极大文本数据
 ```
 
-表的操作：
-	
+
+
+## 2. 表的操作：
+
+​	
+
 ```mysql
 修改表的介绍：
 alter table 表名 comment '修改后的表的注释';
@@ -134,13 +140,17 @@ alter table 表名 modify column 字段名 decimal(10, 1) default 0 comment 新�
    alter table 表名 add|charge|drop 列名 类型;
 ```
 
-数据操作：
-    增：
-		判断表中某一个字段数据是否存在  1：存在 ， 0：不存在
-		select 列名(s) from 表名 where 条件 limit 行数; // 默认 1， 表示是否存在
-		
-		
-		
+
+
+## 3. 数据操作：
+
+​    增：
+​		判断表中某一个字段数据是否存在  1：存在 ， 0：不存在
+​		select 列名(s) from 表名 where 条件 limit 行数; // 默认 1， 表示是否存在
+​		
+​		
+​		
+
 ```mysql
     a. 全列插入
         insert into 表名 values(....)
