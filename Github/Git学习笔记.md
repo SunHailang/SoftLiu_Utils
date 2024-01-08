@@ -643,6 +643,8 @@ git lfs install
 git lfs track "*.zip" //或者其他后缀的文件  
 git lfs untrack "*.ogg" // 取消track
 
+git lfs track // 查看追踪文件列表
+
 // 对于已经存在仓库的文件 进行迁移
 git lfs migrate mode [options] [--] [branch ...]
 
@@ -696,7 +698,10 @@ git prune
 
 // 清理
 git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc "$@"
-
+```
+// 删除远程已经删除过的分支
+```
+git remote prune origin 
 ```
 
 
@@ -721,8 +726,10 @@ git fetch --multiple [<options>] [(<repository> | <group>)…]
 
 git fetch --all [<options>]
 ```
-
- 
+error: pathspec '分支名' did not match any file(s) known to git
+```
+git remote set-branches --add origin [分支名称]
+```
 
 **描述:**
 
